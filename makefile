@@ -12,7 +12,7 @@ else
 	MD=mkdir -p
 endif
 
-.PHONY: all lib obj clean header
+.PHONY: all lib obj clean header test
 
 all: obj lib header
 
@@ -41,7 +41,11 @@ else
 	@echo "python3 command doesn't appear to exist - skipping header regeneration..."
 endif
 
+test:
+	cd test; make all
+
 clean:
+	cd test; make clean
 	-rm -v lib/libcon2020/libcon2020.so
 	-rm -v lib/libcon2020/libcon2020.dll
 	-rmdir -v lib/libcon2020
