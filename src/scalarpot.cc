@@ -115,7 +115,7 @@ double ScalarPotentialLargeRho( double rho, double z, double a,
 ***************************************************************/
 double ScalarPotential( double rho, double z, double a,
                                 double mui2, double D, 
-                                double deltaz, double deltarho) {
+                                double deltarho, double deltaz) {
 
     double As = ScalarPotentialSmallRho(rho,z,a,mui2,D);
     double Al = ScalarPotentialLargeRho(rho,z,a,mui2,D,deltaz);

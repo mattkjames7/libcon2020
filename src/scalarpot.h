@@ -77,7 +77,7 @@ extern "C" {
 ***************************************************************/
 	double ScalarPotential( double rho, double z, double a,
 							double mui2, double D, 
-							double deltaz, double deltarho);
+							double deltarho, double deltaz);
 
 }
 
