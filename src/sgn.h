@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#endif
+
 
 template <typename T> T sgn(T x) {
 	return (x > 0) - (x < 0);
 }
+#endif

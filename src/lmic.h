@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "flux.h"
-
+#include "sgn.h"
 
 extern "C" {
 	/*************************************************************
@@ -20,7 +20,7 @@ extern "C" {
 	*		double f_theta	1 + 0.25*tan^2 thetai
 	*
 	*************************************************************/
-	doube f_thetai(double thetai);
+	double f_thetai(double thetai);
 
 	/*************************************************************
 	*
@@ -39,14 +39,13 @@ extern "C" {
 	*		double wO_om	angular velocity ratio of outer magnetosphere
 	*						to planetary spin
 	*		double thetamm	ionospheric footprint latitude of the 
-	*						middle magnetosphere boundary (where plasma 
+	*						middle magnetosphere (where plasma 
 	*						goes from rigid corotation to subcorotation)
 	*						in radians.
-	*		double dthetamm	width of the middle magnetosphere boundary
-	*						in radians.
-	*		double thetaom	ionospheric latitude of the open-closed field
+	*		double dthetamm	width of the middle magnetosphere in radians.
+	*		double thetaoc	ionospheric latitude of the open-closed field
 	*						line boundary, in radians.
-	*		double dthetaom	width of the open-closed field line boundary,
+	*		double dthetaoc	width of the open-closed field line boundary,
 	*						in radians.
 	*
 	*	RETURNS:
@@ -76,14 +75,13 @@ extern "C" {
 	*		double wO_om	angular velocity ratio of outer magnetosphere
 	*						to planetary spin
 	*		double thetamm	ionospheric footprint latitude of the 
-	*						middle magnetosphere boundary (where plasma 
+	*						middle magnetosphere (where plasma 
 	*						goes from rigid corotation to subcorotation)
 	*						in radians.
-	*		double dthetamm	width of the middle magnetosphere boundary
-	*						in radians.
-	*		double thetaom	ionospheric latitude of the open-closed field
+	*		double dthetamm	width of the middle magnetosphere in radians.
+	*		double thetaoc	ionospheric latitude of the open-closed field
 	*						line boundary, in radians.
-	*		double dthetaom	width of the open-closed field line boundary,
+	*		double dthetaoc	width of the open-closed field line boundary,
 	*						in radians.
 	*	RETURNS:
 	*		double Ihp		Ionospheric Pedersen current.
@@ -151,14 +149,13 @@ extern "C" {
 	*		double wO_om	angular velocity ratio of outer magnetosphere
 	*						to planetary spin
 	*		double thetamm	ionospheric footprint latitude of the 
-	*						middle magnetosphere boundary (where plasma 
+	*						middle magnetosphere (where plasma 
 	*						goes from rigid corotation to subcorotation)
 	*						in radians.
-	*		double dthetamm	width of the middle magnetosphere boundary
-	*						in radians.
-	*		double thetaom	ionospheric latitude of the open-closed field
+	*		double dthetamm	width of the middle magnetosphere in radians.
+	*		double thetaoc	ionospheric latitude of the open-closed field
 	*						line boundary, in radians.
-	*		double dthetaom	width of the open-closed field line boundary,
+	*		double dthetaoc	width of the open-closed field line boundary,
 	*						in radians.
 	*
 	*	RETURNS:
@@ -169,6 +166,41 @@ extern "C" {
 							double r0, double r1,
 							double mui2, double D, 
 							double deltarho, double deltaz,
+							double wO_open, double wO_om,
+							double thetamm, double dthetamm,
+							double thetaoc, double dthetaoc );
+
+	/*************************************************************
+	*
+	*	NAME: BphiIonosphere(thetai,g,wO_open,wO_om,thetamm,dthetamm,
+	*					thetaom,dthetaom)
+	*
+	*	DESCRIPTION: Calculate the ionospheric azimuthal field using the LMIC 
+	*		model.
+	*
+	*	INPUTS:
+	*		double thetai	ionospheric colatitude, radians.
+	*		double g		dipole coefficient, nT.
+	*		double wO_open	angular velocity ratio of open flux to
+	*						planetary spin
+	*		double wO_om	angular velocity ratio of outer magnetosphere
+	*						to planetary spin
+	*		double thetamm	ionospheric footprint latitude of the 
+	*						middle magnetosphere boundary (where plasma 
+	*						goes from rigid corotation to subcorotation)
+	*						in radians.
+	*		double dthetamm	width of the middle magnetosphere boundary
+	*						in radians.
+	*		double thetaoc	ionospheric latitude of the open-closed field
+	*						line boundary, in radians.
+	*		double dthetaoc	width of the open-closed field line boundary,
+	*						in radians.
+	*
+	*	RETURNS:
+	*		double Bphi		Azimuthal field, nT.
+	*
+	*************************************************************/
+	double BphiIonosphere( 	double thetai, double g,
 							double wO_open, double wO_om,
 							double thetamm, double dthetamm,
 							double thetaoc, double dthetaoc );

@@ -17,9 +17,16 @@ Con2020::Con2020() {
 	CartIn_ = true;
 	CartOut_ = true;
 	deltarho_ = 1.0;
-	deltaz_ = 0.01;
+	deltaz_ = 0.1;
 	smooth_ = false;
-	
+	wO_open_ = 0.1;
+	wO_oc_ = 0.35;
+	thetamm_ = 16.1;
+	dthetamm_ = 0.5;
+	thetaoc_ = 10.716;
+	dthetaoc_ = 0.125;
+	g_ = 417659.3836476442;
+	strcpy(azfunc_,"connerney");
 	
 	/* some other values which will only need calculating once */
 	discshift_ = (xp_-180.0)*deg2rad;
@@ -59,7 +66,15 @@ Con2020::Con2020(double mui, double irho, double r0, double r1,
 	deltarho_ = 1.0;
 	deltaz_ = 0.01;
 	smooth_ = false;
-		
+	wO_open_ = 0.1;
+	wO_oc_ = 0.35;
+	thetamm_ = 16.1;
+	dthetamm_ = 0.5;
+	thetaoc_ = 10.716;
+	dthetaoc_ = 0.125;
+	g_ = 417659.3836476442;
+	strcpy(azfunc_,"connerney");
+
 	/* apply custom values if they are valid */
 	SetCurrentDensity(mui);
 	SetRadCurrentDensity(irho);
@@ -131,6 +146,15 @@ void Con2020::_SetModelFunctions() {
 		_Model = &Con2020::_Hybrid;
 	} else {
 		printf("What's going on here then?\n");
+	}
+
+	/* set the azimuthal function */
+	if (strcmp(azfunc_,"connerney")) {
+		_AzimuthalField = &Con2020::_BphiConnerney;
+	} else if (strcmp(azfunc_,"lmic")) {
+		_AzimuthalField = &Con2020::_BphiLMIC;
+	} else {
+		printf("Azimuthal function %s not recognised\n",azfunc_);
 	}
 	
 }
@@ -267,7 +291,7 @@ void Con2020::_BMag2PolSysIII(int n, double *x1, double *y1, double *rho1,
 	
 }
 
-void Con2020::_AzimuthalField(int n, double *rho, double *z, double *absz, double *Bphi) {
+void Con2020::_BphiConnerney(int n, double *rho, double *z, double *absz, double *Bphi) {
 	
 	int i;
 	for (i=0;i<n;i++) {
@@ -284,7 +308,7 @@ void Con2020::_AzimuthalField(int n, double *rho, double *z, double *absz, doubl
 	}
 }
 
-void Con2020::_AzimuthalField(double rho, double absz, double z, double *Bphi) {
+void Con2020::_BphiConnerney(double rho, double absz, double z, double *Bphi) {
 	
 	Bphi[0] = 2.7975*irho_/rho;
 		
@@ -297,6 +321,15 @@ void Con2020::_AzimuthalField(double rho, double absz, double z, double *Bphi) {
 	}
 }
 
+void Con2020::_BphiLMIC(double rho, double absz, double z, double *Bphi) {
+
+	double r = sqrt(rho*rho + z*z);
+	double theta = asin(rho/r);
+
+	Bphi[0] = BphiLMIC(r,theta,g_,r0_,r1_,mui_,d_,deltarho_,deltaz_,
+				wO_open_,wO_oc_,thetamm_,dthetamm_,thetaoc_,dthetaoc_);
+
+}
 
 void Con2020::Field(double p0, double p1, double p2,
 					double *B0, double *B1, double *B2) {
@@ -428,7 +461,7 @@ void Con2020::_Analytic(double rho, double absz, double z,
 	_AnalyticInner(rho,z,Brho,Bz);
 	
 	/* also the azimuthal field */
-	_AzimuthalField(rho,absz,z,Bphi);
+	(this->*_AzimuthalField)(rho,absz,z,Bphi);
 	
 	/* we need to calculate the outer edge contribution */
 	double oBrho, oBz;
@@ -447,7 +480,7 @@ void Con2020::_AnalyticSmooth(double rho, double absz, double z,
 	_AnalyticInnerSmooth(rho,z,Brho,Bz);
 	
 	/* also the azimuthal field */
-	_AzimuthalField(rho,absz,z,Bphi);
+	(this->*_AzimuthalField)(rho,absz,z,Bphi);
 	
 	/* we need to calculate the outer edge contribution */
 	double oBrho, oBz;
@@ -811,7 +844,7 @@ void Con2020::_Integral(double rho, double absz, double z,
 	_IntegralInner(rho,absz,z,Brho,Bz);
 	
 	/* also the azimuthal field */
-	_AzimuthalField(rho,absz,z,Bphi);
+	(this->*_AzimuthalField)(rho,absz,z,Bphi);
 
 	/* we need to calculate the outer edge contribution */
 	double oBrho, oBz;
@@ -1044,7 +1077,7 @@ void Con2020::_Hybrid(double rho, double absz, double z,
 	}
 
 	/* also the azimuthal field */
-	_AzimuthalField(rho,absz,z,Bphi);
+	(this->*_AzimuthalField)(rho,absz,z,Bphi);
 
 	/* we need to calculate the outer edge contribution */
 	double oBrho, oBz;
@@ -1246,4 +1279,81 @@ void Con2020::SetDeltaZ(double DeltaZ) {
 
 double Con2020::GetDeltaZ() {
 	return deltaz_;
+}
+
+void Con2020::SetOmegaOpen(double OmegaOpen) {
+	wO_open_ = OmegaOpen;
+}
+
+double Con2020::GetOmegaOpen() {
+	return wO_open_;
+}
+
+void Con2020::SetOmegaOC(double OmegaOC) {
+	wO_oc_ = OmegaOC;
+}
+
+double Con2020::GetOmegaOC() {
+	return wO_oc_;
+}
+
+void Con2020::SetThetaMM(double ThetaMM) {
+	/* we need this to be in radians, but will accept it in degrees */
+	thetamm_ = ThetaMM*deg2rad;
+}
+
+double Con2020::GetThetaMM() {
+	/* convert back to degrees*/
+	return thetamm_/deg2rad;
+}
+
+void Con2020::SetdThetaMM(double dThetaMM) {
+	/* we need this to be in radians, but will accept it in degrees */
+	dthetamm_ = dThetaMM*deg2rad;
+}
+
+double Con2020::GetdThetaMM() {
+	/* convert back to degrees*/
+	return dthetamm_/deg2rad;
+}
+
+void Con2020::SetThetaOC(double ThetaOC) {
+	/* we need this to be in radians, but will accept it in degrees */
+	thetaoc_ = ThetaOC*deg2rad;
+}
+
+double Con2020::GetThetaOC() {
+	/* convert back to degrees*/
+	return thetaoc_/deg2rad;
+}
+
+void Con2020::SetdThetaOC(double dThetaOC) {
+	/* we need this to be in radians, but will accept it in degrees */
+	dthetaoc_ = dThetaOC*deg2rad;
+}
+
+double Con2020::GetdThetaOC() {
+	/* convert back to degrees*/
+	return dthetaoc_/deg2rad;
+}
+
+void Con2020::SetG(double g) {
+	g_ = g;
+}
+
+double Con2020::GetG() {
+	return g_;
+}
+
+void Con2020::SetAzimuthalFunc(const char* azfunc) {
+	if (strcmp(azfunc,"connerney") || strcmp(azfunc,"lmic")) {
+		strcpy(azfunc_,azfunc);
+		_SetModelFunctions();
+	} else {
+		printf("Azimuthal function %s not recognised\n",azfunc);
+	}
+}
+
+void Con2020::GetAzimuthalFunc(char* azfunc) {
+	strcmp(azfunc,azfunc_);
 }

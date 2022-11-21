@@ -10,8 +10,9 @@
 #include "clip.h"
 #include "smoothd.h"
 #include "trap.h"
+#include "lmic.h"
 #define deg2rad M_PI/180.0;
-#endif
+
 
 /* function pointer for input conversion */
 class Con2020; /*this is needed for the pointer below */ 
@@ -29,6 +30,9 @@ typedef void (Con2020::*ModelFunc)(double,double,double,double*,double*,double*)
 
 /* analytical approximation equations */
 typedef void (Con2020::*Approx)(double,double,double,double,double,double*,double*);
+
+/* azimuthal function */
+typedef void (Con2020::*AzimFunc)(double,double,double,double*);
 
 class Con2020 {
 	public:
@@ -56,6 +60,14 @@ class Con2020 {
 		void SetSmooth(bool);
 		void SetDeltaRho(double);
 		void SetDeltaZ(double);
+		void SetOmegaOpen(double);
+		void SetOmegaOC(double);
+		void SetThetaMM(double);
+		void SetdThetaMM(double);
+		void SetThetaOC(double);
+		void SetdThetaOC(double);
+		void SetG(double);
+		void SetAzimuthalFunc(const char*);
 		
 		/* these mamber functions will be the "getter" version of the
 		 * above setters */
@@ -74,7 +86,15 @@ class Con2020 {
 		bool GetSmooth();
 		double GetDeltaRho();
 		double GetDeltaZ();
-		
+		double GetOmegaOpen();
+		double GetOmegaOC();
+		double GetThetaMM();
+		double GetdThetaMM();
+		double GetThetaOC();
+		double GetdThetaOC();
+		double GetG();
+		void GetAzimuthalFunc(char *);
+
 		/* This function will be used to call the model, it is overloaded
 		 * so that we have one for arrays, one for scalars */
 		void Field(int,double*,double*,double*,double*,double*,double*);
@@ -94,6 +114,10 @@ class Con2020 {
 		bool CartIn_,CartOut_;
 		double deltaz_,deltarho_;
 		bool smooth_;
+
+		/* LMIC parameters*/
+		double wO_open_, wO_oc_, thetamm_, dthetamm_, thetaoc_, dthetaoc_, g_;
+		char azfunc_[10];
 		
 		/* Bessel function arrays - arrays prefixed with r and z are
 		 * to be used for integrals which calcualte Brho and Bz,
@@ -155,8 +179,10 @@ class Con2020 {
 		ModelFunc _Model;
 							
 		/* Azimuthal field */
-		void _AzimuthalField(int,double*,double*,double*,double*);
-		void _AzimuthalField(double,double,double,double*);
+		AzimFunc _AzimuthalField;
+		void _BphiConnerney(int,double*,double*,double*,double*);
+		void _BphiConnerney(double,double,double,double*);
+		void _BphiLMIC(double,double,double,double*);
 		Approx _LargeRho;
 		Approx _SmallRho;		
 		/* analytic equations */
@@ -190,3 +216,4 @@ class Con2020 {
 		/* hybrid */
 		void _Hybrid(double,double,double,double*,double*,double*);
 };
+#endif

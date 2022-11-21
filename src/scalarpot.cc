@@ -26,8 +26,8 @@ double ScalarPotentialSmallRho( double rho, double z, double a,
     double zmd = z - D;
     double zpd2 = zpd*zpd;
     double zmd2 = zmd*zmd;
-    double zpda = np.sqrt(zpd2 + a2);
-    double zmda = np.sqrt(zmd2 + a2);
+    double zpda = sqrt(zpd2 + a2);
+    double zmda = sqrt(zmd2 + a2);
     double zpda3 = zpda*zpda*zpda;
     double zmda3 = zmda*zmda*zmda;
 
@@ -70,8 +70,8 @@ double ScalarPotentialLargeRho( double rho, double z, double a,
     double zmd = z - D;
     double zpd2 = zpd*zpd;
     double zmd2 = zmd*zmd;
-    double zpdr = np.sqrt(zpd2 + rho2);
-    double zmdr = np.sqrt(zmd2 + rho2);
+    double zpdr = sqrt(zpd2 + rho2);
+    double zmdr = sqrt(zmd2 + rho2);
 
 
 	double term0 = (1/(2*rho))*(zpd*zpdr - zmd*zmdr);

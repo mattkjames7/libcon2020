@@ -15,7 +15,7 @@
 *		double f_theta	1 + 0.25*tan^2 thetai
 *
 *************************************************************/
-doube f_thetai(double thetai) {
+double f_thetai(double thetai) {
 
 	double tanti = tan(thetai);
 	return 1.0 + 0.25*tanti*tanti;
@@ -38,14 +38,13 @@ doube f_thetai(double thetai) {
 *		double wO_om	angular velocity ratio of outer magnetosphere
 *						to planetary spin
 *		double thetamm	ionospheric footprint latitude of the 
-*						middle magnetosphere boundary (where plasma 
+*						middle magnetosphere (where plasma 
 *						goes from rigid corotation to subcorotation)
 *						in radians.
-*		double dthetamm	width of the middle magnetosphere boundary
-*						in radians.
-*		double thetaom	ionospheric latitude of the open-closed field
+*		double dthetamm	width of the middle magnetosphere in radians.
+*		double thetaoc	ionospheric latitude of the open-closed field
 *						line boundary, in radians.
-*		double dthetaom	width of the open-closed field line boundary,
+*		double dthetaoc	width of the open-closed field line boundary,
 *						in radians.
 *
 *	RETURNS:
@@ -58,7 +57,7 @@ double OmegaRatio(	double thetai, double wO_open, double wO_om,
 					double thetaoc, double dthetaoc) {
 
 	double term1 = 0.5*(wO_om - wO_open)*(1.0 + tanh((thetai - thetaoc)/dthetaoc));
-	double term2 = 0.5*(1.0 - wO_om)*(1.0 + np.tanh((thetai - thetamm)/dthetamm));
+	double term2 = 0.5*(1.0 - wO_om)*(1.0 + tanh((thetai - thetamm)/dthetamm));
 	
 	double wO = wO_open + term1 + term2;
 
@@ -83,14 +82,13 @@ double OmegaRatio(	double thetai, double wO_open, double wO_om,
 *		double wO_om	angular velocity ratio of outer magnetosphere
 *						to planetary spin
 *		double thetamm	ionospheric footprint latitude of the 
-*						middle magnetosphere boundary (where plasma 
+*						middle magnetosphere (where plasma 
 *						goes from rigid corotation to subcorotation)
 *						in radians.
-*		double dthetamm	width of the middle magnetosphere boundary
-*						in radians.
-*		double thetaom	ionospheric latitude of the open-closed field
+*		double dthetamm	width of the middle magnetosphere in radians.
+*		double thetaoc	ionospheric latitude of the open-closed field
 *						line boundary, in radians.
-*		double dthetaom	width of the open-closed field line boundary,
+*		double dthetaoc	width of the open-closed field line boundary,
 *						in radians.
 *	RETURNS:
 *		double Ihp		Ionospheric Pedersen current.
@@ -111,7 +109,7 @@ double PedersenCurrent(	double thetai, double g,
 	double Rj = 71492000.0;
 	
 	/* magnetic field at thetai */
-	double B = np.abs(2.0* g*cos(thetai)*pow(Rj/Ri,3.0))*1e-9;
+	double B = abs(2.0* g*cos(thetai)*pow(Rj/Ri,3.0))*1e-9;
 
 	/* calculate rhoi */
 	double rhoi = Ri*sin(thetai);
@@ -125,9 +123,9 @@ double PedersenCurrent(	double thetai, double g,
 	double ft = f_thetai(thetai);
 
 	/* the current */
-	double Ihp = 2.0*np.pi*SigmaP*rhoi*rhoi*domega*B*ft;
+	double Ihp = 2.0*M_PI*SigmaP*rhoi*rhoi*domega*B*ft;
 
-	return IhP;
+	return Ihp;
 }
 
 /*************************************************************
@@ -178,7 +176,7 @@ double ThetaIonosphere(	double r, double theta, double g,
 	double Rj = 71492000.0;
 
 	/* theta ionosphere, yay! */
-	double thetai = arcsin(sqrt((Ri/Rj)*(Fcan + Fdip)/g));	
+	double thetai = asin(sqrt((Ri/Rj)*(Fcan + Fdip)/g));	
 
 	return thetai;
 }
@@ -214,9 +212,9 @@ double ThetaIonosphere(	double r, double theta, double g,
 *						in radians.
 *		double dthetamm	width of the middle magnetosphere boundary
 *						in radians.
-*		double thetaom	ionospheric latitude of the open-closed field
+*		double thetaoc	ionospheric latitude of the open-closed field
 *						line boundary, in radians.
-*		double dthetaom	width of the open-closed field line boundary,
+*		double dthetaoc	width of the open-closed field line boundary,
 *						in radians.
 *
 *	RETURNS:
@@ -235,11 +233,11 @@ double BphiLMIC(double r, double theta, double g,
 	double thetai = ThetaIonosphere(r,theta,g,r0,r1,mui2,D,deltarho,deltaz);
 
 	/* sign of the latitude */
-	double slat = sign(M_PI/2 - theta);
+	double slat = sgn(M_PI/2 - theta);
 
 	/* Pedersen Current */
 	double IhP = PedersenCurrent(thetai,g,wO_open,wO_om,thetamm,
-								dthetamm,thetaoc,thetaoc,dthetaoc);
+								dthetamm,thetaoc,dthetaoc);
 
 	/* constants */
 	double Rj = 71492000.0;
@@ -249,7 +247,65 @@ double BphiLMIC(double r, double theta, double g,
 	double rho = r*sin(theta)*Rj;
 
 	/* calculate Bphi */
-	double Bphi = (-sgn*mu0*IhP)/(2*M_PI*rho);
+	double Bphi = (-slat*mu0*IhP)/(2*M_PI*rho);
+
+	return Bphi*1e9;
+
+}
+
+
+/*************************************************************
+*
+*	NAME: BphiIonosphere(thetai,g,wO_open,wO_om,thetamm,dthetamm,
+*					thetaom,dthetaom)
+*
+*	DESCRIPTION: Calculate the ionospheric azimuthal field using the LMIC 
+*		model.
+*
+*	INPUTS:
+*		double thetai	ionospheric colatitude, radians.
+*		double g		dipole coefficient, nT.
+*		double wO_open	angular velocity ratio of open flux to
+*						planetary spin
+*		double wO_om	angular velocity ratio of outer magnetosphere
+*						to planetary spin
+*		double thetamm	ionospheric footprint latitude of the 
+*						middle magnetosphere boundary (where plasma 
+*						goes from rigid corotation to subcorotation)
+*						in radians.
+*		double dthetamm	width of the middle magnetosphere boundary
+*						in radians.
+*		double thetaoc	ionospheric latitude of the open-closed field
+*						line boundary, in radians.
+*		double dthetaoc	width of the open-closed field line boundary,
+*						in radians.
+*
+*	RETURNS:
+*		double Bphi		Azimuthal field, nT.
+*
+*************************************************************/
+double BphiIonosphere( 	double thetai, double g,
+						double wO_open, double wO_om,
+						double thetamm, double dthetamm,
+						double thetaoc, double dthetaoc ) {
+
+
+	/* sign of the latitude */
+	double slat = sgn(M_PI/2 - thetai);
+
+	/* Pedersen Current */
+	double IhP = PedersenCurrent(thetai,g,wO_open,wO_om,thetamm,
+								dthetamm,thetaoc,dthetaoc);
+
+	/* constants */
+	double Ri = 67350000.0;
+	double mu0 = 4*M_PI*1e-7;
+
+	/* rho (m)*/
+	double rho = Ri*sin(thetai);
+
+	/* calculate Bphi */
+	double Bphi = (-slat*mu0*IhP)/(2*M_PI*rho);
 
 	return Bphi*1e9;
 

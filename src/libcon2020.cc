@@ -21,7 +21,9 @@ void Con2020Field(double p0, double p1, double p2,
 void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
 				double *d, double *xt, double *xp, char *eqtype,
 				bool *Edwards, bool *ErrChk, bool *CartIn, bool *CartOut, 
-				bool  *smooth, double *DeltaRho, double *DeltaZ) {
+				bool  *smooth, double *DeltaRho, double *DeltaZ,
+				double *g, char *azfunc, double *wO_open, double *wO_oc,
+				double *thetamm, double *dthetamm, double *thetaoc, double *dthetaoc) {
 
 	mui[0] = con2020.GetCurrentDensity();
 	irho[0] = con2020.GetRadCurrentDensity();
@@ -38,12 +40,25 @@ void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
 	smooth[0] = con2020.GetSmooth();
 	DeltaRho[0] = con2020.GetDeltaRho();
 	DeltaZ[0] = con2020.GetDeltaZ();
+
+	/* new LMIC parameters */
+	g[0] = con2020.GetG();
+	con2020.GetAzimuthalFunc(azfunc);
+	wO_open[0] = con2020.GetOmegaOpen();
+	wO_oc[0] = con2020.GetOmegaOC();
+	thetamm[0] = con2020.GetThetaMM();
+	dthetamm[0] = con2020.GetdThetaMM();
+	thetaoc[0] = con2020.GetThetaOC();
+	dthetaoc[0] = con2020.GetdThetaOC();
+
 	
 }
 void SetCon2020Params(double mui, double irho, double r0, double r1,
 				double d, double xt, double xp, const char *eqtype,
 				bool Edwards, bool ErrChk, bool CartIn, bool CartOut, 
-				bool smooth, double DeltaRho, double DeltaZ) {
+				bool smooth, double DeltaRho, double DeltaZ,
+				double g, const char *azfunc, double wO_open, double wO_oc,
+				double thetamm, double dthetamm, double thetaoc, double dthetaoc) {
 
 	con2020.SetCurrentDensity(mui);
 	con2020.SetRadCurrentDensity(irho);
@@ -60,6 +75,16 @@ void SetCon2020Params(double mui, double irho, double r0, double r1,
 	con2020.SetSmooth(smooth);
 	con2020.SetDeltaRho(DeltaRho);
 	con2020.SetDeltaZ(DeltaZ);
+
+	/*set LMIC parameters */
+	con2020.SetG(g);
+	con2020.SetAzimuthalFunc(azfunc);
+	con2020.SetOmegaOpen(wO_open);
+	con2020.SetOmegaOC(wO_oc);
+	con2020.SetThetaMM(thetamm);
+	con2020.SetdThetaMM(dthetamm);
+	con2020.SetThetaOC(thetaoc);
+	con2020.SetdThetaOC(dthetaoc);
 }
 
 void Con2020AnalyticField(	int n, double a, 

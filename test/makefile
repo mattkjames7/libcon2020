@@ -12,6 +12,7 @@ all:
 
 	./testbessel
 	python3 testbessel.py
+	python3 lmic.py
 
 clean:
 	-rm -v testbessel
