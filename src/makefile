@@ -21,6 +21,9 @@ obj:
 	$(CCo) trap.cc -o $(BUILDDIR)/trap.o 
 	$(CCo) smoothd.cc -o $(BUILDDIR)/smoothd.o 
 	$(CCo) libcon2020.cc -o $(BUILDDIR)/libcon2020.o
+	$(CCo) scalarpot.cc -o $(BUILDDIR)/scalarpot.o
+	$(CCo) flux.cc -o $(BUILDDIR)/flux.o
+	$(CCo) lmic.cc -o $(BUILDDIR)/lmic.o
 
 lib:
 	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/libcon2020/libcon2020.so
@@ -32,6 +35,9 @@ winobj:
 	$(CCWo) trap.cc -o $(BUILDDIR)/trap.o 
 	$(CCWo) smoothd.cc -o $(BUILDDIR)/smoothd.o 
 	$(CCWo) libcon2020.cc -o $(BUILDDIR)/libcon2020.o
+	$(CCWo) scalarpot.cc -o $(BUILDDIR)/scalarpot.o
+	$(CCWo) flux.cc -o $(BUILDDIR)/flux.o
+	$(CCWo) lmic.cc -o $(BUILDDIR)/lmic.o
 
 winlib:
 	$(CCW) $(BUILDDIR)/*.o -shared -o ../lib/libcon2020/libcon2020.dll
