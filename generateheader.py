@@ -230,7 +230,7 @@ def CombineHeaders():
 
 
     #create the output file
-    with open('include/libcon2020.h','w') as f:
+    with open('include/con2020.h','w') as f:
         f.writelines(out)
         print('Saved header file')
 

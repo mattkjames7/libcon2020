@@ -9,14 +9,21 @@ ifeq ($(OS),Windows_NT)
 	MD=mkdir
 else
 #linux and mac here
+	OS=$(shell uname -s)
 	MD=mkdir -p
 endif
 
-.PHONY: all lib obj clean header test
+ifeq ($(PREFIX),)
+#install path
+	PREFIX=/usr/local
+endif
 
-all: obj lib header
 
-windows: winobj winlib header
+.PHONY: all lib obj clean header test install testinstall uninstall
+
+all: obj lib
+
+windows: winobj winlib
 
 obj:
 	$(MD) $(BUILDDIR)
@@ -51,3 +58,27 @@ clean:
 	-rmdir -v lib/libcon2020
 	-rm -v build/*.o
 	-rmdir -v build
+	-rm -v testinstall
+
+install:
+	cp -v include/con2020.h $(PREFIX)/include
+	cp -v include/con2020c.h $(PREFIX)/include
+	cp -v lib/libcon2020/libcon2020.so $(PREFIX)/lib
+	chmod 0775 $(PREFIX)/lib/libcon2020.so
+ifeq ($(OS),Linux)
+	ldconfig
+endif
+
+
+uninstall:
+	rm -v $(PREFIX)/include/con2020.h
+	rm -v $(PREFIX)/include/con2020c.h
+	rm -v $(PREFIX)/lib/libcon2020.so
+ifeq ($(OS),"Linux")
+	ldconfig
+endif
+
+testinstall:
+	g++ test/testc_installed.cc -o testinstall -lcon2020
+	./testinstall
+	rm -v testinstall
