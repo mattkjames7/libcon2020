@@ -688,6 +688,7 @@ double FluxCan(	double rho,double z, double r0, double r1,
 	/* according to Edwards et al., 2001 the flux is simply
 	rho times the scalar potential */
 	double F = rho*(A0 - A1);
+
 	return F;
 }
 

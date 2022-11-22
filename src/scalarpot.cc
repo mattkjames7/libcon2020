@@ -32,7 +32,7 @@ double ScalarPotentialSmallRho( double rho, double z, double a,
     double zmda3 = zmda*zmda*zmda;
 
     double term0 = (rho/2.0)*log((zpd + zpda)/(zmd + zmda));
-    double term1 = (rho*rho*rho/16.0)*(zpd/zpda3 - zmd-zmda3);
+    double term1 = (rho*rho*rho/16.0)*(zpd/zpda3 - zmd/zmda3);
 
     double A = mui2*(term0 + term1);
     return A;
