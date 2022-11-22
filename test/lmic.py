@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import ctypes
+import platform
 
 #define some dtypes
 c_char_p = ctypes.c_char_p
@@ -24,7 +25,10 @@ c_int_ptr = np.ctypeslib.ndpointer(ctypes.c_int,flags="C_CONTIGUOUS")
 c_bool_ptr = np.ctypeslib.ndpointer(ctypes.c_bool,flags="C_CONTIGUOUS")
 c_char_p_ptr = ctypes.POINTER(c_char_p) 
 
-lib = ctypes.CDLL('../lib/libcon2020/libcon2020.so')
+if platform.system() == 'Linux':
+	lib = ctypes.CDLL('../lib/libcon2020/libcon2020.so')
+else:
+	lib = ctypes.CDLL('../lib/libcon2020/libcon2020.dylib')
 
 _COmegaRatio = lib.OmegaRatio
 _COmegaRatio.restype = c_double
