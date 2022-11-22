@@ -32,3 +32,5 @@ compile.bat
 ```
 
 With a system wide installation, the compiler and linker will be able to locate the library and its header, otherwise absolute paths must be provided for linking and including.
+
+## Usage
