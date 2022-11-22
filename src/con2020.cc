@@ -156,7 +156,7 @@ void Con2020::_SetModelFunctions() {
 	} else {
 		printf("Azimuthal function %s not recognised\n",azfunc_);
 	}
-	
+	printf("%s\n",azfunc_);
 }
 
 void Con2020::_SysIII2Mag(int n, double *x0, double *y0, double *z0,
@@ -292,7 +292,7 @@ void Con2020::_BMag2PolSysIII(int n, double *x1, double *y1, double *rho1,
 }
 
 void Con2020::_BphiConnerney(int n, double *rho, double *z, double *absz, double *Bphi) {
-	
+	printf("c1\n");
 	int i;
 	for (i=0;i<n;i++) {
 		Bphi[i] = 2.7975*irho_/rho[i];
@@ -309,7 +309,7 @@ void Con2020::_BphiConnerney(int n, double *rho, double *z, double *absz, double
 }
 
 void Con2020::_BphiConnerney(double rho, double absz, double z, double *Bphi) {
-	
+	printf("c2\n");
 	Bphi[0] = 2.7975*irho_/rho;
 		
 	if (absz < d_) {
@@ -338,13 +338,13 @@ void Con2020::Field(double p0, double p1, double p2,
 	double x, y, z, rho, absz;
 	double cost, sint, cosp, sinp;	
 	double Brho, Bphi, Bz;
-	
+	printf("%f %f %f\n",p0,p1,p2);
 	/* convert the input coordinates */
 	(this->*_ConvInput)(1,&p0,&p1,&p2,&x,&y,&z,&rho,&absz,&cost,&sint,&cosp,&sinp);
-	
+	printf("%f %f %f\n",x,y,z);
 	/* calculate the mode field */
 	(this->*_Model)(rho,absz,z,&Brho,&Bphi,&Bz);
-	
+	printf("%f %f %f\n",Brho,Bphi,Bz);
 	/*convert the output field */
 	(this->*_ConvOutput)(1,&x,&y,&rho,&cost,&sint,&cosp,&sinp,&Brho,&Bphi,&Bz,B0,B1,B2);
 }

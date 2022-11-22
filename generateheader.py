@@ -7,7 +7,11 @@ headerfiles = [ 'src/bessel.h',
                 'src/libcon2020.h',
                 'src/polyeval.h',
                 'src/smoothd.h',
-                'src/trap.h']
+                'src/trap.h',
+                'src/flux.cc',
+                'src/sgn.h',
+                'src/scalarpot.h',
+                'src/lmic.h']
 
 def ReadFile(fname):
     '''
