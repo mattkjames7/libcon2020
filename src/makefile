@@ -11,6 +11,12 @@ ifndef BUILDDIR
 	BUILDDIR=../build
 endif
 
+OS=$(shell uname -s)
+ifeq ($(OS),Linux)
+	LIBFILE=libcon2020.so
+else
+	LIBFILE=libcon2020.dylib
+endif
 
 all: obj lib 
 
@@ -26,7 +32,7 @@ obj:
 	$(CCo) lmic.cc -o $(BUILDDIR)/lmic.o
 
 lib:
-	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/libcon2020/libcon2020.so
+	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/libcon2020/$(LIBFILE)
 	
 winobj:
 	$(CCWo) con2020.cc -o $(BUILDDIR)/con2020.o 

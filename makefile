@@ -55,6 +55,7 @@ clean:
 	cd test; make clean
 	-rm -v lib/libcon2020/libcon2020.so
 	-rm -v lib/libcon2020/libcon2020.dll
+	-rm -v lib/libcon2020/libcon2020.dylib
 	-rmdir -v lib/libcon2020
 	-rm -v build/*.o
 	-rmdir -v build
@@ -63,22 +64,28 @@ clean:
 install:
 	cp -v include/con2020.h $(PREFIX)/include
 	cp -v include/con2020c.h $(PREFIX)/include
-	cp -v lib/libcon2020/libcon2020.so $(PREFIX)/lib
-	chmod 0775 $(PREFIX)/lib/libcon2020.so
+
 ifeq ($(OS),Linux)
 	ldconfig
+	cp -v lib/libcon2020/libcon2020.so $(PREFIX)/lib
+	chmod 0775 $(PREFIX)/lib/libcon2020.so
+else
+	cp -v lib/libcon2020/libcon2020.dylib $(PREFIX)/lib
+	chmod 0775 $(PREFIX)/lib/libcon2020.dylib
 endif
 
 
 uninstall:
 	rm -v $(PREFIX)/include/con2020.h
 	rm -v $(PREFIX)/include/con2020c.h
+ifeq ($(OS),Linux)
 	rm -v $(PREFIX)/lib/libcon2020.so
-ifeq ($(OS),"Linux")
 	ldconfig
+else
+	rm -v $(PREFIX)/lib/libcon2020.dylib
 endif
 
 testinstall:
-	g++ test/testc_installed.cc -o testinstall -lcon2020
+	g++ -std=c++17 test/testc_installed.cc -o testinstall -lcon2020
 	./testinstall
 	rm -v testinstall

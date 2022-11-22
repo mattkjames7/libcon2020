@@ -7,10 +7,17 @@ CC=g++ -fPIC $(CFLAGS)
 CCWo=x86_64-w64-mingw32-g++-win32 -c $(CFLAGS)
 CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS)
 
+OS=$(shell uname -s)
+ifeq ($(OS),Linux) 
+	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib/libcon2020' -L ../lib/libcon2020 -lcon2020
+else 
+	LDFLAGS=-L ../lib/libcon2020 -lcon2020
+endif
+
 all:
-	$(CC) testbessel.cc -o testbessel	-Wl,-rpath='$$ORIGIN/../lib/libcon2020' -L ../lib/libcon2020 -lcon2020
-	gcc -fPIC -lm -O3 testc.c -o testc -Wl,-rpath='$$ORIGIN/../lib/libcon2020' -L ../lib/libcon2020 -lcon2020
-	$(CC) testc.cc -o testcc -Wl,-rpath='$$ORIGIN/../lib/libcon2020' -L ../lib/libcon2020 -lcon2020
+	$(CC) testbessel.cc -o testbessel	$(LDFLAGS) 
+	gcc -fPIC -lm -O3 testc.c -o testc $(LDFLAGS) 
+	$(CC) testc.cc -o testcc $(LDFLAGS) 
 	./testc
 	./testcc
 	./testbessel
