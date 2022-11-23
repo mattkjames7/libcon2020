@@ -76,8 +76,8 @@ Con2020::Con2020(double mui, double irho, double r0, double r1,
 	strcpy(azfunc_,"connerney");
 
 	/* apply custom values if they are valid */
-	SetCurrentDensity(mui);
-	SetRadCurrentDensity(irho);
+	SetAzCurrentParameter(mui);
+	SetRadCurrentParameter(irho);
 	SetR0(r0);
 	SetR1(r1);
 	SetCSHalfThickness(d);
@@ -1355,5 +1355,5 @@ void Con2020::SetAzimuthalFunc(const char* azfunc) {
 }
 
 void Con2020::GetAzimuthalFunc(char* azfunc) {
-	strcmp(azfunc,azfunc_);
+	strcpy(azfunc,azfunc_);
 }
