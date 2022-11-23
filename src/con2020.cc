@@ -1131,7 +1131,7 @@ void Con2020::GetEqType(char *eqtype) {
 	strcpy(eqtype,eqtype_);
 }
 	
-void Con2020::SetCurrentDensity(double mui) {
+void Con2020::SetAzCurrentParameter(double mui) {
 	
 	if (isfinite(mui)) {
 		/* good value (hopefully) */
@@ -1141,11 +1141,11 @@ void Con2020::SetCurrentDensity(double mui) {
 	}
 }
 
-double Con2020::GetCurrentDensity() {
+double Con2020::GetAzCurrentParameter() {
 	return mui_;
 }
 	
-void Con2020::SetRadCurrentDensity(double irho) {
+void Con2020::SetRadCurrentParameter(double irho) {
 	if (isfinite(irho)) {
 		/* good value (hopefully) */
 		irho_ = irho;
@@ -1154,7 +1154,7 @@ void Con2020::SetRadCurrentDensity(double irho) {
 	}	
 }
 
-double Con2020::GetRadCurrentDensity() {
+double Con2020::GetRadCurrentParameter() {
 	return irho_;
 }
 

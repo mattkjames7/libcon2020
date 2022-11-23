@@ -47,8 +47,8 @@ class Con2020 {
 		 * they need to be changed post-initialisation */
 		void SetEdwardsEqs(bool);
 		void SetEqType(const char*);
-		void SetCurrentDensity(double);
-		void SetRadCurrentDensity(double);
+		void SetAzCurrentParameter(double);
+		void SetRadCurrentParameter(double);
 		void SetR0(double);
 		void SetR1(double);
 		void SetCSHalfThickness(double);
@@ -73,8 +73,8 @@ class Con2020 {
 		 * above setters */
 		bool GetEdwardsEqs();
 		void GetEqType(char*);
-		double GetCurrentDensity();
-		double GetRadCurrentDensity();
+		double GetAzCurrentParameter();
+		double GetRadCurrentParameter();
 		double GetR0();
 		double GetR1();
 		double GetCSHalfThickness();

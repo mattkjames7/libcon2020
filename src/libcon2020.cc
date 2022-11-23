@@ -25,8 +25,8 @@ void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
 				double *g, char *azfunc, double *wO_open, double *wO_oc,
 				double *thetamm, double *dthetamm, double *thetaoc, double *dthetaoc) {
 
-	mui[0] = con2020.GetCurrentDensity();
-	irho[0] = con2020.GetRadCurrentDensity();
+	mui[0] = con2020.GetAzCurrentParameter();
+	irho[0] = con2020.GetRadCurrentParameter();
 	r0[0] = con2020.GetR0();
 	r1[0] = con2020.GetR1();
 	d[0] = con2020.GetCSHalfThickness();
@@ -60,8 +60,8 @@ void SetCon2020Params(double mui, double irho, double r0, double r1,
 				double g, const char *azfunc, double wO_open, double wO_oc,
 				double thetamm, double dthetamm, double thetaoc, double dthetaoc) {
 
-	con2020.SetCurrentDensity(mui);
-	con2020.SetRadCurrentDensity(irho);
+	con2020.SetAzCurrentParameter(mui);
+	con2020.SetRadCurrentParameter(irho);
 	con2020.SetR0(r0);
 	con2020.SetR1(r1);
 	con2020.SetCSHalfThickness(d);
