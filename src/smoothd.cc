@@ -16,10 +16,11 @@
  * ********************************************************************/
 double smoothd(double z, double dz, double d) {
 	
-	double out, tanhzd0, tanhzd1;
+	double tanhzd0, tanhzd1;
 	
 	tanhzd0 = tanh((z + d)/dz);
 	tanhzd1 = tanh((z - d)/dz);
 	
-	return 0.5*(d*(tanhzd0 + tanhzd1) + z*(tanhzd0 - tanhzd1));
+	return 0.5*(d*z*(tanhzd0 + tanhzd1) + 0.5*(d*d + z*z)*(tanhzd0 - tanhzd1));
+
 }
