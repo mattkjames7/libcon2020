@@ -10,6 +10,7 @@
 #define LIBCON2020_VERSION_MINOR 1
 #define LIBCON2020_VERSION_PATCH 0
 
+#define M_PI		3.14159265358979323846
 #define USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
 #define deg2rad M_PI/180.0;
@@ -486,7 +487,7 @@ class Con2020 {
 		 * above setters */
 		bool GetEdwardsEqs();
 		void GetEqType(char*);
-		double GetAzCurrentParaameter();
+		double GetAzCurrentParameter();
 		double GetRadCurrentParameter();
 		double GetR0();
 		double GetR1();

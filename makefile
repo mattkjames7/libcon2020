@@ -66,9 +66,9 @@ install:
 	cp -v include/con2020c.h $(PREFIX)/include
 
 ifeq ($(OS),Linux)
-	ldconfig
 	cp -v lib/libcon2020/libcon2020.so $(PREFIX)/lib
 	chmod 0775 $(PREFIX)/lib/libcon2020.so
+	ldconfig
 else
 	cp -v lib/libcon2020/libcon2020.dylib $(PREFIX)/lib
 	chmod 0775 $(PREFIX)/lib/libcon2020.dylib

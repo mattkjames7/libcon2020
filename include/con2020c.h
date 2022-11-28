@@ -25,7 +25,7 @@ void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
 					double *d, double *xt, double *xp, char *eqtype,
 					bool *Edwards, bool *ErrChk, bool *CartIn, bool *CartOut, 
 					bool *smooth, double *DeltaRho, double *DeltaZ,
-					double *g, char *azfunc, double *wO_open, double *wO_oc,
+					double *g, char *azfunc, double *wO_open, double *wO_om,
 					double *thetamm, double *dthetamm, double *thetaoc, double *dthetaoc);
 						
 	
@@ -33,7 +33,7 @@ void SetCon2020Params(double mui, double irho, double r0, double r1,
 					double d, double xt, double xp, const char *eqtype,
 					bool Edwards, bool ErrChk, bool CartIn, bool CartOut, 
 					bool smooth, double DeltaRho, double DeltaZ,
-					double g, const char *azfunc, double wO_open, double wO_oc,
+					double g, const char *azfunc, double wO_open, double wO_om,
 					double thetamm, double dthetamm, double thetaoc, double dthetaoc);
 
 void Con2020AnalyticField(	int n, double a, 

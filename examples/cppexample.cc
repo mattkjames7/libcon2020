@@ -18,7 +18,7 @@ int main () {
 
 	/* call the model */
 	model.Field(x,y,z,&Bx,&By,&Bz);
-	printf("B=[%5.1f,%5.1f,%5.1f] nT at [%4.1f,%4.1f,%4.1f] Rj\n",x,y,z,Bx,By,Bz);
+	printf("B=[%5.1f,%5.1f,%5.1f] nT at [%4.1f,%4.1f,%4.1f] Rj\n",Bx,By,Bz,x,y,z);
 
 	/* alternatively obtain an array of field vectors in spherical polar coords */
 	model.SetCartIn(false);
@@ -31,7 +31,7 @@ int main () {
 	model.Field(3,r,theta,phi,Br,Bt,Bp);
 	int i;
 	for (i=0;i<3;i++) {
-		printf("B=[%5.1f,%5.1f,%5.1f] nT at r = %4.1f Rj, theta = %4.1f rad, phi = %4.1f rad\n",r[i],theta[i],phi[i],Br[i],Bt[i],Bp[i]);
+		printf("B=[%5.1f,%5.1f,%5.1f] nT at r = %4.1f Rj, theta = %4.1f rad, phi = %4.1f rad\n",Br[i],Bt[i],Bp[i],r[i],theta[i],phi[i]);
 	}
 	
 	return 0;
