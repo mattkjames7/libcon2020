@@ -11,7 +11,8 @@
 #include "smoothd.h"
 #include "trap.h"
 #include "lmic.h"
-#define deg2rad M_PI/180.0;
+#define deg2rad M_PI/180.0
+#define rad2deg 180.0/M_PI
 
 
 /* function pointer for input conversion */
@@ -61,7 +62,7 @@ class Con2020 {
 		void SetDeltaRho(double);
 		void SetDeltaZ(double);
 		void SetOmegaOpen(double);
-		void SetOmegaOC(double);
+		void SetOmegaOM(double);
 		void SetThetaMM(double);
 		void SetdThetaMM(double);
 		void SetThetaOC(double);
@@ -87,7 +88,7 @@ class Con2020 {
 		double GetDeltaRho();
 		double GetDeltaZ();
 		double GetOmegaOpen();
-		double GetOmegaOC();
+		double GetOmegaOM();
 		double GetThetaMM();
 		double GetdThetaMM();
 		double GetThetaOC();
@@ -116,7 +117,7 @@ class Con2020 {
 		bool smooth_;
 
 		/* LMIC parameters*/
-		double wO_open_, wO_oc_, thetamm_, dthetamm_, thetaoc_, dthetaoc_, g_;
+		double wO_open_, wO_om_, thetamm_, dthetamm_, thetaoc_, dthetaoc_, g_;
 		char azfunc_[10];
 		
 		/* Bessel function arrays - arrays prefixed with r and z are

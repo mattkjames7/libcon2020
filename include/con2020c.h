@@ -11,7 +11,8 @@
 #define LIBCON2020_VERSION_PATCH 0
 
 #define _USE_MATH_DEFINES
-#define deg2rad M_PI/180.0;
+#define deg2rad M_PI/180.0
+#define rad2deg 180.0/M_PI
 
 /* these wrappers can be used to get the magnetic field vectors */
 void Con2020FieldArray(int n, double *p0, double *p1, double *p2,

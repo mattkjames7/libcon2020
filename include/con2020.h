@@ -13,7 +13,8 @@
 #define M_PI		3.14159265358979323846
 #define USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
-#define deg2rad M_PI/180.0;
+#define deg2rad M_PI/180.0
+#define rad2deg 180.0/M_PI
 
 extern "C" {
 	/* these wrappers can be used to get the magnetic field vectors */
@@ -28,7 +29,7 @@ extern "C" {
 					double *d, double *xt, double *xp, char *eqtype,
 					bool *Edwards, bool *ErrChk, bool *CartIn, bool *CartOut, 
 					bool *smooth, double *DeltaRho, double *DeltaZ,
-					double *g, char *azfunc, double *wO_open, double *wO_oc,
+					double *g, char *azfunc, double *wO_open, double *wO_om,
 					double *thetamm, double *dthetamm, double *thetaoc, double *dthetaoc);
 						
 	
@@ -36,7 +37,7 @@ extern "C" {
 					double d, double xt, double xp, const char *eqtype,
 					bool Edwards, bool ErrChk, bool CartIn, bool CartOut, 
 					bool smooth, double DeltaRho, double DeltaZ,
-					double g, const char *azfunc, double wO_open, double wO_oc,
+					double g, const char *azfunc, double wO_open, double wO_om,
 					double thetamm, double dthetamm, double thetaoc, double dthetaoc);
 
 	void Con2020AnalyticField(	int n, double a, 
@@ -475,7 +476,7 @@ class Con2020 {
 		void SetDeltaRho(double);
 		void SetDeltaZ(double);
 		void SetOmegaOpen(double);
-		void SetOmegaOC(double);
+		void SetOmegaOM(double);
 		void SetThetaMM(double);
 		void SetdThetaMM(double);
 		void SetThetaOC(double);
@@ -501,7 +502,7 @@ class Con2020 {
 		double GetDeltaRho();
 		double GetDeltaZ();
 		double GetOmegaOpen();
-		double GetOmegaOC();
+		double GetOmegaOM();
 		double GetThetaMM();
 		double GetdThetaMM();
 		double GetThetaOC();
@@ -530,7 +531,7 @@ class Con2020 {
 		bool smooth_;
 
 		/* LMIC parameters*/
-		double wO_open_, wO_oc_, thetamm_, dthetamm_, thetaoc_, dthetaoc_, g_;
+		double wO_open_, wO_om_, thetamm_, dthetamm_, thetaoc_, dthetaoc_, g_;
 		char azfunc_[10];
 		
 		/* Bessel function arrays - arrays prefixed with r and z are
