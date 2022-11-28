@@ -22,7 +22,7 @@ void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
 				double *d, double *xt, double *xp, char *eqtype,
 				bool *Edwards, bool *ErrChk, bool *CartIn, bool *CartOut, 
 				bool  *smooth, double *DeltaRho, double *DeltaZ,
-				double *g, char *azfunc, double *wO_open, double *wO_oc,
+				double *g, char *azfunc, double *wO_open, double *wO_om,
 				double *thetamm, double *dthetamm, double *thetaoc, double *dthetaoc) {
 
 	mui[0] = con2020.GetAzCurrentParameter();
@@ -45,7 +45,7 @@ void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
 	g[0] = con2020.GetG();
 	con2020.GetAzimuthalFunc(azfunc);
 	wO_open[0] = con2020.GetOmegaOpen();
-	wO_oc[0] = con2020.GetOmegaOC();
+	wO_om[0] = con2020.GetOmegaOM();
 	thetamm[0] = con2020.GetThetaMM();
 	dthetamm[0] = con2020.GetdThetaMM();
 	thetaoc[0] = con2020.GetThetaOC();
@@ -57,7 +57,7 @@ void SetCon2020Params(double mui, double irho, double r0, double r1,
 				double d, double xt, double xp, const char *eqtype,
 				bool Edwards, bool ErrChk, bool CartIn, bool CartOut, 
 				bool smooth, double DeltaRho, double DeltaZ,
-				double g, const char *azfunc, double wO_open, double wO_oc,
+				double g, const char *azfunc, double wO_open, double wO_om,
 				double thetamm, double dthetamm, double thetaoc, double dthetaoc) {
 
 	con2020.SetAzCurrentParameter(mui);
@@ -80,7 +80,7 @@ void SetCon2020Params(double mui, double irho, double r0, double r1,
 	con2020.SetG(g);
 	con2020.SetAzimuthalFunc(azfunc);
 	con2020.SetOmegaOpen(wO_open);
-	con2020.SetOmegaOC(wO_oc);
+	con2020.SetOmegaOM(wO_om);
 	con2020.SetThetaMM(thetamm);
 	con2020.SetdThetaMM(dthetamm);
 	con2020.SetThetaOC(thetaoc);

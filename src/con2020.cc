@@ -20,14 +20,14 @@ Con2020::Con2020() {
 	deltaz_ = 0.1;
 	smooth_ = false;
 	wO_open_ = 0.1;
-	wO_oc_ = 0.35;
-	thetamm_ = 16.1;
-	dthetamm_ = 0.5;
-	thetaoc_ = 10.716;
-	dthetaoc_ = 0.125;
+	wO_om_ = 0.35;
+	thetamm_ = 16.1*deg2rad;
+	dthetamm_ = 0.5*deg2rad;
+	thetaoc_ = 10.716*deg2rad;
+	dthetaoc_ = 0.125*deg2rad;
 	g_ = 417659.3836476442;
 	strcpy(azfunc_,"connerney");
-	
+
 	/* some other values which will only need calculating once */
 	discshift_ = (xp_-180.0)*deg2rad;
 	disctilt_ = xt_*deg2rad;
@@ -67,11 +67,11 @@ Con2020::Con2020(double mui, double irho, double r0, double r1,
 	deltaz_ = 0.01;
 	smooth_ = false;
 	wO_open_ = 0.1;
-	wO_oc_ = 0.35;
-	thetamm_ = 16.1;
-	dthetamm_ = 0.5;
-	thetaoc_ = 10.716;
-	dthetaoc_ = 0.125;
+	wO_om_ = 0.35;
+	thetamm_ = 16.1*deg2rad;
+	dthetamm_ = 0.5*deg2rad;
+	thetaoc_ = 10.716*deg2rad;
+	dthetaoc_ = 0.125*deg2rad;
 	g_ = 417659.3836476442;
 	strcpy(azfunc_,"connerney");
 
@@ -327,7 +327,7 @@ void Con2020::_BphiLMIC(double rho, double absz, double z, double *Bphi) {
 	double theta = asin(rho/r);
 
 	Bphi[0] = BphiLMIC(r,theta,g_,r0_,r1_,mui_,d_,deltarho_,deltaz_,
-				wO_open_,wO_oc_,thetamm_,dthetamm_,thetaoc_,dthetaoc_);
+				wO_open_,wO_om_,thetamm_,dthetamm_,thetaoc_,dthetaoc_);
 
 }
 
@@ -1289,12 +1289,12 @@ double Con2020::GetOmegaOpen() {
 	return wO_open_;
 }
 
-void Con2020::SetOmegaOC(double OmegaOC) {
-	wO_oc_ = OmegaOC;
+void Con2020::SetOmegaOM(double OmegaOM) {
+	wO_om_ = OmegaOM;
 }
 
-double Con2020::GetOmegaOC() {
-	return wO_oc_;
+double Con2020::GetOmegaOM() {
+	return wO_om_;
 }
 
 void Con2020::SetThetaMM(double ThetaMM) {
@@ -1304,7 +1304,7 @@ void Con2020::SetThetaMM(double ThetaMM) {
 
 double Con2020::GetThetaMM() {
 	/* convert back to degrees*/
-	return thetamm_/deg2rad;
+	return thetamm_*rad2deg;
 }
 
 void Con2020::SetdThetaMM(double dThetaMM) {
@@ -1314,7 +1314,7 @@ void Con2020::SetdThetaMM(double dThetaMM) {
 
 double Con2020::GetdThetaMM() {
 	/* convert back to degrees*/
-	return dthetamm_/deg2rad;
+	return dthetamm_*rad2deg;
 }
 
 void Con2020::SetThetaOC(double ThetaOC) {
@@ -1324,7 +1324,7 @@ void Con2020::SetThetaOC(double ThetaOC) {
 
 double Con2020::GetThetaOC() {
 	/* convert back to degrees*/
-	return thetaoc_/deg2rad;
+	return thetaoc_*rad2deg;
 }
 
 void Con2020::SetdThetaOC(double dThetaOC) {
@@ -1334,7 +1334,7 @@ void Con2020::SetdThetaOC(double dThetaOC) {
 
 double Con2020::GetdThetaOC() {
 	/* convert back to degrees*/
-	return dthetaoc_/deg2rad;
+	return dthetaoc_*rad2deg;
 }
 
 void Con2020::SetG(double g) {

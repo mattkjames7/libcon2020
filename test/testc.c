@@ -11,4 +11,5 @@ int main() {
 	Con2020Field(x,y,z,&Bx,&By,&Bz);
 
 	printf("B = [%5.1f,%5.1f,%5.1f] at [%4.1f,%4.1f,%4.1f]\n",Bx,By,Bz,x,y,z);
+	
 }
