@@ -21,10 +21,10 @@ Con2020::Con2020() {
 	smooth_ = false;
 	wO_open_ = 0.1;
 	wO_oc_ = 0.35;
-	thetamm_ = 16.1;
-	dthetamm_ = 0.5;
-	thetaoc_ = 10.716;
-	dthetaoc_ = 0.125;
+	thetamm_ = 16.1*deg2rad;
+	dthetamm_ = 0.5*deg2rad;
+	thetaoc_ = 10.716*deg2rad;
+	dthetaoc_ = 0.125*deg2rad;
 	g_ = 417659.3836476442;
 	strcpy(azfunc_,"connerney");
 	
@@ -68,10 +68,10 @@ Con2020::Con2020(double mui, double irho, double r0, double r1,
 	smooth_ = false;
 	wO_open_ = 0.1;
 	wO_oc_ = 0.35;
-	thetamm_ = 16.1;
-	dthetamm_ = 0.5;
-	thetaoc_ = 10.716;
-	dthetaoc_ = 0.125;
+	thetamm_ = 16.1*deg2rad;
+	dthetamm_ = 0.5*deg2rad;
+	thetaoc_ = 10.716*deg2rad;
+	dthetaoc_ = 0.125*deg2rad;
 	g_ = 417659.3836476442;
 	strcpy(azfunc_,"connerney");
 
