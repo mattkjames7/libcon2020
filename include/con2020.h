@@ -1,54 +1,31 @@
+
 #ifndef __LIBCON2020_H__
 #define __LIBCON2020_H__
-#include <algorithm>
+
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-#define LIBCON2020_VERSION_MAJOR 0
-#define LIBCON2020_VERSION_MINOR 1
+#ifdef __cplusplus
+	#include <algorithm>
+	#include <string>
+#else
+	#include <string.h>
+	#include <stdbool.h>
+#endif
+#define LIBCON2020_VERSION_MAJOR 1
+#define LIBCON2020_VERSION_MINOR 0
 #define LIBCON2020_VERSION_PATCH 0
 
-#define M_PI		3.14159265358979323846
-#define USE_MATH_DEFINES
-#define _USE_MATH_DEFINES
 #define deg2rad M_PI/180.0
 #define rad2deg 180.0/M_PI
 
+
+#ifdef __cplusplus
 extern "C" {
-	/* these wrappers can be used to get the magnetic field vectors */
-	void Con2020FieldArray(int n, double *p0, double *p1, double *p2,
-					double *B0, double *B1, double *B2);
+#endif
 	
-	void Con2020Field(double p0, double p1, double p2,
-			double *B0, double *B1, double *B2);
-
-
-	void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
-					double *d, double *xt, double *xp, char *eqtype,
-					bool *Edwards, bool *ErrChk, bool *CartIn, bool *CartOut, 
-					bool *smooth, double *DeltaRho, double *DeltaZ,
-					double *g, char *azfunc, double *wO_open, double *wO_om,
-					double *thetamm, double *dthetamm, double *thetaoc, double *dthetaoc);
-						
-	
-	void SetCon2020Params(double mui, double irho, double r0, double r1,
-					double d, double xt, double xp, const char *eqtype,
-					bool Edwards, bool ErrChk, bool CartIn, bool CartOut, 
-					bool smooth, double DeltaRho, double DeltaZ,
-					double g, const char *azfunc, double wO_open, double wO_om,
-					double thetamm, double dthetamm, double thetaoc, double dthetaoc);
-
-	void Con2020AnalyticField(	int n, double a, 
-							double *rho, double *z, 
-							double *Brho, double *Bz);
-
-	void Con2020AnalyticFieldSmooth(	int n, double a, 
-							double *rho, double *z, 
-							double *Brho, double *Bz);
-
-
 /***************************************************************
 *
 *   NAME : ScalarPotentialSmallRho(rho,z,a,mui2,D)
@@ -319,8 +296,43 @@ extern "C" {
 							double wO_open, double wO_om,
 							double thetamm, double dthetamm,
 							double thetaoc, double dthetaoc );
+	/* these wrappers can be used to get the magnetic field vectors */
+	void Con2020FieldArray(int n, double *p0, double *p1, double *p2,
+					double *B0, double *B1, double *B2);
+	
+	void Con2020Field(double p0, double p1, double p2,
+			double *B0, double *B1, double *B2);
+
+
+	void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
+					double *d, double *xt, double *xp, char *eqtype,
+					bool *Edwards, bool *ErrChk, bool *CartIn, bool *CartOut, 
+					bool *smooth, double *DeltaRho, double *DeltaZ,
+					double *g, char *azfunc, double *wO_open, double *wO_om,
+					double *thetamm, double *dthetamm, double *thetaoc, double *dthetaoc);
+						
+	
+	void SetCon2020Params(double mui, double irho, double r0, double r1,
+					double d, double xt, double xp, const char *eqtype,
+					bool Edwards, bool ErrChk, bool CartIn, bool CartOut, 
+					bool smooth, double DeltaRho, double DeltaZ,
+					double g, const char *azfunc, double wO_open, double wO_om,
+					double thetamm, double dthetamm, double thetaoc, double dthetaoc);
+
+	void Con2020AnalyticField(	int n, double a, 
+							double *rho, double *z, 
+							double *Brho, double *Bz);
+
+	void Con2020AnalyticFieldSmooth(	int n, double a, 
+							double *rho, double *z, 
+							double *Brho, double *Bz);
+
+#ifdef __cplusplus
 }
 
+double polyeval(double x, double *c, int d);
+
+double pol1eval(double x, double *c, int d);
 
 /***********************************************************************
  * NAME : j0(x)
@@ -425,9 +437,101 @@ void j0(int n, double *x, double multx, double *j);
 void j1(int n, double *x, double multx, double *j);
 
 
+
+
+
+
 template <typename T> T clip(T x, T mn, T mx) {
 	return std::min(mx,std::max(x,mn));
 }
+
+
+
+
+
+template <typename T> T sgn(T x) {
+	return (x > 0) - (x < 0);
+}
+
+
+double trap(int n, double *x, double *y);
+double trapc(int n, double dx, double *y);
+
+
+/***********************************************************************
+ * NAME : smoothd(z,dz,d)
+ * 
+ * DESCRIPTION : Smooth fucntion for crossing the current sheet 
+ * (replaces the last bit of equation 12 in Edwards et al 2000).
+ * 
+ * INPUTS : 
+ * 		double z	z-coordinate in dipole coordinate system (Rj)
+ * 		double dz	Scale of the transition to use (Rj)
+ * 		double d	Half thickness of the current sheet.
+ * 
+ * RETURNS : 
+ * 		double out	Smoothed function across the current sheet.
+ * 
+ * ********************************************************************/
+double smoothd(double z, double dz, double d);
+
+
+/***************************************************************
+*
+*   NAME : FluxCan(rho,z,r0,r1,mui2,D,deltarho,deltaz)
+*
+*   DESCRIPTION : Calculate the flux contribution from the 
+* 		CAN current sheet (using Edwards et al. 2001 equations).
+*
+*   INPUTS : 
+*       double  rho     Cylindrical rho coordinate (in disc 
+*                       coordinate system, Rj)
+*       double  z       z-coordinate, Rj
+*       double  r0       inner edge of semi-infinite current 
+*                       sheet, Rj
+*		double 	r1		inner edge of the outer portion of the 
+*						current sheet to be subtracted
+*       double mui2     mu_0 I_0 /2 parameter (default 139.6 nT)
+*       double D        Current sheet half-thickness, Rj
+*       double deltarho Scale length to smoothly transition from
+*                       small to large rho approx
+*       double deltaz   Scale length over which to smooth 4th
+*                        term of the equation
+*
+***************************************************************/
+double FluxCan(	double rho,double z, double r0, double r1,
+				double mui2, double D, 
+				double deltarho, double deltaz) {
+
+	double A0 = ScalarPotential(rho,z,r0,mui2,D,deltarho,deltaz);
+	double A1 = ScalarPotential(rho,z,r1,mui2,D,deltarho,deltaz);
+
+	/* according to Edwards et al., 2001 the flux is simply
+	rho times the scalar potential */
+	double F = rho*(A0 - A1);
+
+	return F;
+}
+
+/***************************************************************
+*
+*   NAME : FluxDip(r,theta,g)
+*
+*   DESCRIPTION : Calculate the flux cfunction for a dipole
+*
+*   INPUTS : 
+*       double  r 		radial coordinate, Rj
+*       double  theta   Colatitude, Rads
+*       double  g		Magnetic dipole coefficient, nT
+*
+***************************************************************/
+double FluxDip(double r, double theta, double g) {
+
+	double sint = sin(theta);
+	double F = (g*sint*sint)/r;
+	return F;
+}
+
 
 /* function pointer for input conversion */
 class Con2020; /*this is needed for the pointer below */ 
@@ -545,6 +649,7 @@ class Con2020 {
 		double **rj1_lambda_rho_;/* j1(lambda*rho) */
 		double **zj0_lambda_r0_; /* j0(lambda*r0) */
 		double **zj0_lambda_rho_;/* j0(lambda*rho) */
+
 		
 		/* arrays to multiply be stuff to be integrated */
 		/* these arrays will store the parts of equations 14, 15, 17 
@@ -554,6 +659,7 @@ class Con2020 {
 		double **Eq17_;     /* j0(lambda*r0)*exp(-lamba*d)/lambda */
 		double **Eq18_;     /* j0(lambda*r0)/lambda */
 		double **ExpLambdaD_;
+		
 
 		/* integration step sizes */
 		static constexpr double dlambda_ = 1e-4;
@@ -564,6 +670,7 @@ class Con2020 {
 		double rlmx_array_[6];
 		double zlmx_array_[6];
 
+
 		/* coordinate conversions for positions */
 		InputConvFunc _ConvInput;
 		void _SysIII2Mag(int,double*,double*,double*,
@@ -572,6 +679,7 @@ class Con2020 {
 		void _PolSysIII2Mag(int,double*,double*,double*,
 						double*,double*,double*,double*,double*,
 						double*,double*,double*,double*);
+		
 		
 		/* coordinate conversion for magnetic field vector */
 		OutputConvFunc _ConvOutput;
@@ -628,93 +736,12 @@ class Con2020 {
 		void _Hybrid(double,double,double,double*,double*,double*);
 };
 
+
+
 /* we want to initialize the model objects with its parameters */
 extern Con2020 con2020;
 
 
-double polyeval(double x, double *c, int d);
-
-double pol1eval(double x, double *c, int d);
-
-/***********************************************************************
- * NAME : smoothd(z,dz,d)
- * 
- * DESCRIPTION : Smooth fucntion for crossing the current sheet 
- * (replaces the last bit of equation 12 in Edwards et al 2000).
- * 
- * INPUTS : 
- * 		double z	z-coordinate in dipole coordinate system (Rj)
- * 		double dz	Scale of the transition to use (Rj)
- * 		double d	Half thickness of the current sheet.
- * 
- * RETURNS : 
- * 		double out	Smoothed function across the current sheet.
- * 
- * ********************************************************************/
-double smoothd(double z, double dz, double d);
-
-
-double trap(int n, double *x, double *y);
-double trapc(int n, double dx, double *y);
-
-/***************************************************************
-*
-*   NAME : FluxCan(rho,z,r0,r1,mui2,D,deltarho,deltaz)
-*
-*   DESCRIPTION : Calculate the flux contribution from the 
-* 		CAN current sheet (using Edwards et al. 2001 equations).
-*
-*   INPUTS : 
-*       double  rho     Cylindrical rho coordinate (in disc 
-*                       coordinate system, Rj)
-*       double  z       z-coordinate, Rj
-*       double  r0       inner edge of semi-infinite current 
-*                       sheet, Rj
-*		double 	r1		inner edge of the outer portion of the 
-*						current sheet to be subtracted
-*       double mui2     mu_0 I_0 /2 parameter (default 139.6 nT)
-*       double D        Current sheet half-thickness, Rj
-*       double deltarho Scale length to smoothly transition from
-*                       small to large rho approx
-*       double deltaz   Scale length over which to smooth 4th
-*                        term of the equation
-*
-***************************************************************/
-double FluxCan(	double rho,double z, double r0, double r1,
-				double mui2, double D, 
-				double deltarho, double deltaz) {
-
-	double A0 = ScalarPotential(rho,z,r0,mui2,D,deltarho,deltaz);
-	double A1 = ScalarPotential(rho,z,r1,mui2,D,deltarho,deltaz);
-
-	/* according to Edwards et al., 2001 the flux is simply
-	rho times the scalar potential */
-	double F = rho*(A0 - A1);
-
-	return F;
-}
-
-/***************************************************************
-*
-*   NAME : FluxDip(r,theta,g)
-*
-*   DESCRIPTION : Calculate the flux cfunction for a dipole
-*
-*   INPUTS : 
-*       double  r 		radial coordinate, Rj
-*       double  theta   Colatitude, Rads
-*       double  g		Magnetic dipole coefficient, nT
-*
-***************************************************************/
-double FluxDip(double r, double theta, double g) {
-
-	double sint = sin(theta);
-	double F = (g*sint*sint)/r;
-	return F;
-}
-template <typename T> T sgn(T x) {
-	return (x > 0) - (x < 0);
-}
-
-
 #endif
+#endif
+	

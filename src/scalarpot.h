@@ -2,7 +2,7 @@
 #define __SCALARPOT_H__
 #include <stdio.h>
 #include <stdlib.h>
-#define USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 extern "C" {

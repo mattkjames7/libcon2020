@@ -1,11 +1,14 @@
 # CFLAGS for CC
 CFLAGS=-lm -std=c++17 -Wextra -O3
 
+#includeflags
+IFLAGS=-I../include
+
 # Compiler
-CCo=g++ -fPIC -c $(CFLAGS)
-CC=g++ -fPIC $(CFLAGS)
-CCWo=x86_64-w64-mingw32-g++-win32 -c $(CFLAGS)
-CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS)
+CCo=g++ -fPIC -c $(CFLAGS) $(IFLAGS)
+CC=g++ -fPIC $(CFLAGS) $(IFLAGS)
+CCWo=x86_64-w64-mingw32-g++-win32 -c $(CFLAGS) $(IFLAGS)
+CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS) $(IFLAGS)
 
 OS=$(shell uname -s)
 ifeq ($(OS),Linux) 
@@ -16,7 +19,7 @@ endif
 
 all:
 	$(CC) testbessel.cc -o testbessel	$(LDFLAGS) 
-	gcc -fPIC -lm -O3 testc.c -o testc $(LDFLAGS) 
+	gcc $(IFLAGS) -fPIC -lm -O3 testc.c -o testc $(LDFLAGS) 
 	$(CC) testc.cc -o testcc $(LDFLAGS) 
 	./testc
 	./testcc

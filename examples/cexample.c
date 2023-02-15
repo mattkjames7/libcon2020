@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <con2020c.h>
+#include <con2020.h>
 
 int main() {
 

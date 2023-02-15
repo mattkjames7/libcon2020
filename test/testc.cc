@@ -1,4 +1,4 @@
-#include "../include/con2020.h"
+#include <con2020.h>
 #include <stdio.h>
 #define _USE_MATH_DEFINES
 #include <math.h>

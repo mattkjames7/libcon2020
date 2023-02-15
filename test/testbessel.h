@@ -2,7 +2,7 @@
 #define __TESTBESSEL_H__
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/con2020.h"
+#include <con2020.h>
 #include <ctime>
 
 #endif

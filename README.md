@@ -41,9 +41,9 @@ Uninstallation can be acheived in Linux and Mac using ```sudo make uninstall```.
 
 If a system-wide installation is successful then the library may be linked to simply by including the ```-lcon2020``` flag while compiling/linking. Otherwise the path to the library must also be included, e.g. ```-L /path/to/lib/directory -lcon2020```. In Windows, the DLL should be placed in the root directory of the executable linked to it.
 
-This library includes two headers: `con2020.h` - a full header which provides access to everything within the library for use with C++ (including classes and C++ specific objects); and `con2020c.h` - a partial header which can be included in C, exposing C-compatible wrapper functions. The wrapper functions in the partial header file would also provide the easiest ways to link other languages to the library such as Python, IDL and Fortran.
+This library includes a header file `include/con2020.h` which is compatible with both C and C++. This header contains the full set of function and class prototypes for use with C++, it also includes C-compaitble wrapper functions. The wrapper functions in the header file would also provide the easiest ways to link other languages to the library such as Python, IDL and Fortran.
 
-If the library was installed system-wide, then the headers may be included using ```#include <con2020.h>;``` and ```#include <con2020c.h>;``` for C++ and C, respectively. Otherwise, a relative or absolute path to the headers must be used, e.g. ```#include "path/to/con2020.h";```.
+If the library was installed system-wide, then the headers may be included using ```#include <con2020.h>```. Otherwise, a relative or absolute path to the headers must be used, e.g. ```#include "path/to/con2020.h"```.
 
 ### C++ usage
 
@@ -104,13 +104,13 @@ g++ cppexample.cc -o cppexample -lcon2020
 
 ### Other Languages
 
-In other languages, it is easier to run the model code by using the wrapper functions listed in both `con2020.h` and `con2020c.h`. For example in C:
+In other languages, it is easier to run the model code by using the wrapper functions listed in both `con2020.h`. For example in C:
 
 ```c
 /* contents of cexample.c */
 #include <stdio.h>
 #include <stdbool.h>
-#include <con2020c.h>
+#include <con2020.h>
 
 int main() {
 

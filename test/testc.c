@@ -1,4 +1,4 @@
-#include "../include/con2020c.h"
+#include <con2020.h>
 #include <stdio.h>
 
 int main() {
