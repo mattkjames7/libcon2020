@@ -177,9 +177,15 @@ void Con2020::_SysIII2Mag(int n, double *x0, double *y0, double *z0,
 		
 		cost[i] = z0[i]/r;
 		sint[i] = rho0/r;
-		sinp[i] = y0[i]/rho0;
-		cosp[i] = x0[i]/rho0;
-		
+
+		if (rho0 != 0.0) {
+			sinp[i] = y0[i]/rho0;
+			cosp[i] = x0[i]/rho0;
+		} else {
+			sinp[i] = 0.0;
+			cosp[i] = 0.0;
+		}
+
 		/*rotate about z0 for the correct longitude */
 		xt = rho0*(cosp[i]*cosxp_ + sinp[i]*sinxp_);
 		y1[i] = rho0*(sinp[i]*cosxp_ - cosp[i]*sinxp_);
@@ -240,8 +246,13 @@ void Con2020::_BMag2SysIII(int n, double *x1, double *y1, double *rho1,
 	int i;
 	for (i=0;i<n;i++) {
 		/* rotating longitude */
-		cosp1 = x1[i]/rho1[i];
-		sinp1 = y1[i]/rho1[i];
+		if (rho1[i] != 0.0) {
+			cosp1 = x1[i]/rho1[i];
+			sinp1 = y1[i]/rho1[i];
+		} else {
+			cosp1 = 0.0;
+			sinp1 = 0.0;
+		}
 		Bx1 = Brho1[i]*cosp1 - Bphi1[i]*sinp1;
 		By1 = Brho1[i]*sinp1 + Bphi1[i]*cosp1;
 		
@@ -269,8 +280,13 @@ void Con2020::_BMag2PolSysIII(int n, double *x1, double *y1, double *rho1,
 	for (i=0;i<n;i++) {
 		
 		/* rotating longitude */
-		cosp1 = x1[i]/rho1[i];
-		sinp1 = y1[i]/rho1[i];
+		if (rho1[i] != 0.0) {
+			cosp1 = x1[i]/rho1[i];
+			sinp1 = y1[i]/rho1[i];
+		} else {
+			cosp1 = 0.0;
+			sinp1 = 0.0;
+		}
 		Bx1 = Brho1[i]*cosp1 - Bphi1[i]*sinp1;
 		By1 = Brho1[i]*sinp1 + Bphi1[i]*cosp1;
 		
@@ -324,7 +340,12 @@ void Con2020::_BphiConnerney(double rho, double absz, double z, double *Bphi) {
 void Con2020::_BphiLMIC(double rho, double absz, double z, double *Bphi) {
 
 	double r = sqrt(rho*rho + z*z);
-	double theta = asin(rho/r);
+	double theta;
+	if (r != 0.0) {
+		theta = asin(rho/r);
+	} else {
+		theta = 0.0
+	}
 
 	Bphi[0] = BphiLMIC(r,theta,g_,r0_,r1_,mui_,d_,deltarho_,deltaz_,
 				wO_open_,wO_om_,thetamm_,dthetamm_,thetaoc_,dthetaoc_);
