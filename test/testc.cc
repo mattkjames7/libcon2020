@@ -33,4 +33,17 @@ int main() {
 	printf("thetaoc = %f\n",thetaoc);
 	printf("dthetaoc = %f\n",dthetaoc);
 
+	/* test field output at R = 0.0 */
+
+	Con2020Field(0.0,0.0,0.0,&Bx,&By,&Bz);
+	printf("Testing R = 0: \n");
+	printf("B = [%5.1f,%5.1f,%5.1f] at [%4.1f,%4.1f,%4.1f]\n",Bx,By,Bz,0.0,0.0,0.0);
+
+	printf("Testing rho = 0.0; z = 5.0\n");
+	double Brho, Bphi;
+	Con2020 obj;
+	(obj.*obj._Model)(0.0,5.0,5.0,&Brho,&Bphi,&Bz);
+
+	printf("Brho,Bphi,Bz = [%5.1f,%5.1f,%5.1f]\n",Brho,Bphi,Bz);
+
 }

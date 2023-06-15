@@ -311,8 +311,12 @@ void Con2020::_BphiConnerney(int n, double *rho, double *z, double *absz, double
 
 	int i;
 	for (i=0;i<n;i++) {
-		Bphi[i] = 2.7975*irho_/rho[i];
-		
+		if (rho[i] == 0.0) {
+			Bphi[i] = 0.0;
+		} else {
+			Bphi[i] = 2.7975*irho_/rho[i];
+		}
+
 		if (absz[i] < d_) {
 			Bphi[i] = Bphi[i]*absz[i]/d_;
 		}
@@ -326,7 +330,11 @@ void Con2020::_BphiConnerney(int n, double *rho, double *z, double *absz, double
 
 void Con2020::_BphiConnerney(double rho, double absz, double z, double *Bphi) {
 
-	Bphi[0] = 2.7975*irho_/rho;
+	if (rho == 0.0) {
+		Bphi[0] = 0.0;
+	} else {
+		Bphi[0] = 2.7975*irho_/rho;
+	}
 		
 	if (absz < d_) {
 		Bphi[0] = Bphi[0]*absz/d_;
@@ -344,7 +352,7 @@ void Con2020::_BphiLMIC(double rho, double absz, double z, double *Bphi) {
 	if (r != 0.0) {
 		theta = asin(rho/r);
 	} else {
-		theta = 0.0
+		theta = 0.0;
 	}
 
 	Bphi[0] = BphiLMIC(r,theta,g_,r0_,r1_,mui_,d_,deltarho_,deltaz_,

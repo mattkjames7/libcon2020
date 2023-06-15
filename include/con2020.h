@@ -623,6 +623,9 @@ class Con2020 {
 		void AnalyticField(double,double,double,double*,double*);
 		void AnalyticFieldSmooth(double,double,double,double*,double*);
 
+		/* expose the model function pointer*/
+		ModelFunc _Model;
+
 	private:
 		/* model parameters */
 		double mui_,irho_,r0_,r1_,d_,xt_,xp_,disctilt_,discshift_;
@@ -695,7 +698,7 @@ class Con2020 {
 		/* Functions to update function pointers */
 		void _SetIOFunctions();
 		void _SetModelFunctions();
-		ModelFunc _Model;
+		
 							
 		/* Azimuthal field */
 		AzimFunc _AzimuthalField;
