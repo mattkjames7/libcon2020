@@ -32,7 +32,7 @@ obj:
 	$(CCo) lmic.cc -o $(BUILDDIR)/lmic.o
 
 lib:
-	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/libcon2020/$(LIBFILE)
+	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/$(LIBFILE)
 	
 winobj:
 	$(CCWo) con2020.cc -o $(BUILDDIR)/con2020.o 
@@ -46,7 +46,7 @@ winobj:
 	$(CCWo) lmic.cc -o $(BUILDDIR)/lmic.o
 
 winlib:
-	$(CCW) $(BUILDDIR)/*.o -shared -o ../lib/libcon2020/libcon2020.dll
+	$(CCW) $(BUILDDIR)/*.o -shared -o ../lib/libcon2020.dll
 
 test:
 	$(CC) test.cc *.o -o test

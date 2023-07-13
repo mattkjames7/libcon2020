@@ -31,7 +31,7 @@ cd libcon2020
 .\compile.bat
 ```
 
-With a system wide installation, the compiler and linker will be able to locate the library and its header, otherwise absolute paths must be provided for linking and including. In Windows there is an experimental script ```install.bat``` which will copy the DLL and headers to folders within the `C:\TDC-GCC-64\` directory. This is experimental, instead it might be better to copy the headers and the DLL to the root directory of the executable linked to it.
+With a system wide installation, the compiler and linker will be able to locate the library and its header, otherwise absolute paths must be provided for linking and including. In Windows there is an experimental script ```install.bat``` which will copy the DLL and headers to folders within the `C:\TDM-GCC-64\` directory. This is experimental, instead it might be better to copy the headers and the DLL to the root directory of the executable linked to it.
 
 Uninstallation can be acheived in Linux and Mac using ```sudo make uninstall```.
 

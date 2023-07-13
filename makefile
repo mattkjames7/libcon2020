@@ -30,7 +30,7 @@ obj:
 	cd src; make obj
 
 lib:
-	$(MD) lib/libcon2020
+	$(MD) lib
 	cd src; make lib
 
 winobj:
@@ -38,7 +38,7 @@ winobj:
 	cd src; make winobj
 
 winlib: 
-	$(MD) lib/libcon2020
+	$(MD) lib
 	cd src; make winlib
 
 header:
@@ -53,9 +53,9 @@ test:
 
 clean:
 	cd test; make clean
-	-rm -v lib/libcon2020/libcon2020.so
-	-rm -v lib/libcon2020/libcon2020.dll
-	-rm -v lib/libcon2020/libcon2020.dylib
+	-rm -v lib/libcon2020.so
+	-rm -v lib/libcon2020.dll
+	-rm -v lib/libcon2020.dylib
 	-rmdir -v lib/libcon2020
 	-rm -v build/*.o
 	-rmdir -v build
@@ -66,11 +66,11 @@ install:
 	cp -v include/con2020c.h $(PREFIX)/include
 
 ifeq ($(OS),Linux)
-	cp -v lib/libcon2020/libcon2020.so $(PREFIX)/lib
+	cp -v lib/libcon2020.so $(PREFIX)/lib
 	chmod 0775 $(PREFIX)/lib/libcon2020.so
 	ldconfig
 else
-	cp -v lib/libcon2020/libcon2020.dylib $(PREFIX)/lib
+	cp -v lib/libcon2020.dylib $(PREFIX)/lib
 	chmod 0775 $(PREFIX)/lib/libcon2020.dylib
 endif
 
