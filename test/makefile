@@ -12,9 +12,9 @@ CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS) $(IFLAGS)
 
 OS=$(shell uname -s)
 ifeq ($(OS),Linux) 
-	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib/libcon2020' -L ../lib/libcon2020 -lcon2020
+	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lcon2020
 else 
-	LDFLAGS=-L ../lib/libcon2020 -lcon2020
+	LDFLAGS=-L ../lib -lcon2020
 endif
 
 all:
@@ -26,6 +26,7 @@ all:
 	./testbessel
 	python3 testbessel.py
 	python3 lmic.py
+	python3 testsmooth.py
 
 clean:
 	-rm -v testbessel
