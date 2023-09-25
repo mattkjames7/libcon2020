@@ -305,6 +305,7 @@ def testSmooth():
     
     
     '''
+    n = np.int32(10)
 
     #use default r0 and r1
     r0 = 7.8
@@ -314,15 +315,15 @@ def testSmooth():
     mlt = 0.0
     mltr = mlt*np.pi/12.0
     
-    rho0 = np.linspace(r0-3,r0+3,100)
+    rho0 = np.linspace(r0-5,r0+5,n)
     x0 = -rho0*np.cos(mltr)
     y0 = -rho0*np.sin(mltr)
-    z0 = np.zeros(100)
+    z0 = np.zeros(n)
 
-    rho1 = np.linspace(r1-3,r1+3,100)
+    rho1 = np.linspace(r1-30,r1+30,n)
     x1 = -rho1*np.cos(mltr)
     y1 = -rho1*np.sin(mltr)
-    z1 = np.zeros(100)
+    z1 = np.zeros(n)
 
     #convert to SIII
     x0,y0,z0 = MagtoSIII(x0,y0,z0,9.3,155.8)
@@ -334,11 +335,11 @@ def testSmooth():
 
     #set smooth off
     cfg['Smooth'] = False
+    cfg['DeltaRho'] = 1.0
     cfg['equation_type'] = 'analytic'
     _SetCFG(cfg)
 
     #get B
-    n = np.int32(100)
     Bx0 = np.zeros(n,dtype='float64')
     By0 = np.zeros(n,dtype='float64')
     Bz0 = np.zeros(n,dtype='float64')
@@ -355,7 +356,7 @@ def testSmooth():
     _SetCFG(cfg)
 
     #get B
-    n = np.int32(100)
+    
     Bx0s = np.zeros(n,dtype='float64')
     By0s = np.zeros(n,dtype='float64')
     Bz0s = np.zeros(n,dtype='float64')
@@ -400,6 +401,37 @@ def testSmooth():
 
     plt.savefig('testsmooth.png')
     plt.close()
+
+    print('Testing single point (normal)')
+    #get params
+    cfg = _GetCFG()
+
+    #set smooth off
+    cfg['Smooth'] = False
+    cfg['DeltaRho'] = 0.0
+    cfg['equation_type'] = 'analytic'
+    _SetCFG(cfg)
+    i = 5
+    x = np.array([x0[i]])
+    y = np.array([y0[i]])
+    z = np.array([z0[i]])
+
+    Bx = np.zeros(1,dtype='float64')
+    By = np.zeros(1,dtype='float64')
+    Bz = np.zeros(1,dtype='float64')
+
+    con2020FieldArray(1,x,y,z,Bx,By,Bz)
+
+    #turn smoothing on
+    print('Testing single point (smooth)')
+    cfg['Smooth'] = True
+    _SetCFG(cfg)
+
+    Bxs = np.zeros(1,dtype='float64')
+    Bys = np.zeros(1,dtype='float64')
+    Bzs = np.zeros(1,dtype='float64')
+
+    con2020FieldArray(1,x,y,z,Bxs,Bys,Bzs)
 
 if __name__ == '__main__':
     

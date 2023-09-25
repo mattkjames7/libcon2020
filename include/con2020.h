@@ -16,7 +16,7 @@
 #endif
 #define LIBCON2020_VERSION_MAJOR 1
 #define LIBCON2020_VERSION_MINOR 0
-#define LIBCON2020_VERSION_PATCH 0
+#define LIBCON2020_VERSION_PATCH 1
 
 #define deg2rad M_PI/180.0
 #define rad2deg 180.0/M_PI

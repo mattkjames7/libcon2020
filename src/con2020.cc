@@ -560,8 +560,7 @@ void Con2020::_AnalyticInnerSmooth(	double rho, double z,
 	/* splice together as suggested by Stan */
 	*Brho = Brho0*C0 + Brho1*C1;
 	*Bz = Bz0*C0 + Bz1*C1;
-	
-									
+								
 }
 
 void Con2020::_AnalyticOuter(	double rho, double z, 
@@ -576,7 +575,7 @@ void Con2020::_AnalyticOuter(	double rho, double z,
 	} else {
 		(this->*_SmallRho)(rho,z,zmd,zpd,r1sq_,Brho,Bz);
 	}
-									
+	
 }
 
 
@@ -600,7 +599,8 @@ void Con2020::_AnalyticOuterSmooth(	double rho, double z,
 	tanhrho = tanh((rho-r1_)/deltarho_);
 	C0 = (1-tanhrho)/2.0;
 	C1 = (1+tanhrho)/2.0;
-	
+
+
 	/* splice together as suggested by Stan */
 	*Brho = Brho0*C0 + Brho1*C1;
 	*Bz = Bz0*C0 + Bz1*C1;
@@ -655,7 +655,6 @@ void Con2020::_SmallRhoConnerney(double rho, double z, double zmd, double zpd,
 void Con2020::_LargeRhoEdwards(double rho, double z, double zmd,
 					double zpd, double a2,double *Brho, double *Bz) {
 	
-
 	/* some common variables */
 	double zmd2 = zmd*zmd;
 	double zpd2 = zpd*zpd;
@@ -699,12 +698,14 @@ void Con2020::_LargeRhoEdwardsSmooth(double rho, double z, double zmd,
 	double termb0 = log((zpd + f2)/(zmd + f1));
 	double termb1 = (a2/4.0)*(zpd/f2cubed - zmd/f1cubed);
 	Bz[0] = mui_*(termb0 + termb1);
+
 }
 
 
 void Con2020::_SmallRhoEdwards(double rho, double z, double zmd, double zpd, 
 					double a2, double *Brho, double *Bz) { 
 
+	
 	double zmd2 = zmd*zmd;
 	double zpd2 = zpd*zpd;
 	double f1 = sqrt(zmd2 + a2);
@@ -732,6 +733,7 @@ void Con2020::_SmallRhoEdwards(double rho, double z, double zmd, double zpd,
 	double termb0 = log((zpd + f2)/(zmd + f1));
 	double termb1 = rho2ov4*(zpd/f2cubed - zmd/f1cubed);
 	Bz[0] = mui_*(termb0 + termb1);
+
 }
 
 
@@ -968,7 +970,6 @@ void Con2020::_SolveIntegral(int n, double *rho, double *z,
 
 void Con2020::_IntegralInner( 	double rho, double absz, double z,
 								double *Brho, double *Bz) {
-	//printf("\n_IntegralInner\n");
 	int chind;
 	/* check which set of integral parameters we need to use*/
 	_IntegralCheck(absz,&chind);
