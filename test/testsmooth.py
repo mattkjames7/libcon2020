@@ -305,7 +305,7 @@ def testSmooth():
     
     
     '''
-    n = np.int32(10)
+    n = np.int32(100)
 
     #use default r0 and r1
     r0 = 7.8
@@ -399,6 +399,9 @@ def testSmooth():
     ax1.vlines(r1,ylim[0],ylim[1],color='grey',linestyle=':')
     ax1.legend()
 
+    ax0.set_xlabel('$\\rho$ (R$_J$)')
+    ax1.set_xlabel('$\\rho$ (R$_J$)')
+
     plt.savefig('testsmooth.png')
     plt.close()
 
@@ -433,6 +436,111 @@ def testSmooth():
 
     con2020FieldArray(1,x,y,z,Bxs,Bys,Bzs)
 
+
+
+def testSmoothZ():
+    
+    n = np.int32(100)
+
+    rho0 = 5.0
+    rho1 = 25.0
+    zr0 = -20
+    zr1 = 20
+
+    #get MAG arrays along equator
+    mlt = 0.0
+    mltr = mlt*np.pi/12.0
+    
+    x0 = -rho0*np.cos(mltr) + np.zeros(n)
+    y0 = -rho0*np.sin(mltr) + np.zeros(n)
+    z0 = np.linspace(zr0,zr1,n)
+
+    x1 = -rho1*np.cos(mltr) + np.zeros(n)
+    y1 = -rho1*np.sin(mltr) + np.zeros(n)
+    z1 = np.linspace(zr0,zr1,n)
+
+    #convert to SIII
+    x0,y0,z0 = MagtoSIII(x0,y0,z0,9.3,155.8)
+    x1,y1,z1 = MagtoSIII(x1,y1,z1,9.3,155.8)
+    zm = np.linspace(zr0,zr1,n)
+
+    #get params
+    cfg = _GetCFG()
+
+    #set smooth off
+    cfg['Smooth'] = False
+    cfg['equation_type'] = 'analytic'
+    _SetCFG(cfg)
+
+    #get B
+    Bx0 = np.zeros(n,dtype='float64')
+    By0 = np.zeros(n,dtype='float64')
+    Bz0 = np.zeros(n,dtype='float64')
+
+    Bx1 = np.zeros(n,dtype='float64')
+    By1 = np.zeros(n,dtype='float64')
+    Bz1 = np.zeros(n,dtype='float64')
+
+    con2020FieldArray(n,x0,y0,z0,Bx0,By0,Bz0)
+    con2020FieldArray(n,x1,y1,z1,Bx1,By1,Bz1)
+
+    #turn smoothing on
+    cfg['Smooth'] = True
+    _SetCFG(cfg)
+
+    #get B
+    
+    Bx0s = np.zeros(n,dtype='float64')
+    By0s = np.zeros(n,dtype='float64')
+    Bz0s = np.zeros(n,dtype='float64')
+
+    Bx1s = np.zeros(n,dtype='float64')
+    By1s = np.zeros(n,dtype='float64')
+    Bz1s = np.zeros(n,dtype='float64')
+
+    con2020FieldArray(n,x0,y0,z0,Bx0s,By0s,Bz0s)
+    con2020FieldArray(n,x1,y1,z1,Bx1s,By1s,Bz1s)
+  
+
+    plt.figure(figsize=(8,11))
+    ax0 = plt.subplot2grid((2,1),(0,0))
+    ax1 = plt.subplot2grid((2,1),(1,0))
+
+    ax0.plot(zm,Bx0-np.nanmean(Bx0),color='red',linestyle='--',label='$B_x$')
+    ax0.plot(zm,By0-np.nanmean(By0),color='green',linestyle='--',label='$B_y$')
+    ax0.plot(zm,Bz0-np.nanmean(Bz0),color='blue',linestyle='--',label='$B_z$')
+
+    ax0.plot(zm,Bx0-np.nanmean(Bx0s),color='red',linestyle='-',label='$B_x$ (smooth)')
+    ax0.plot(zm,By0-np.nanmean(By0s),color='green',linestyle='-',label='$B_y$ (smooth)')
+    ax0.plot(zm,Bz0-np.nanmean(Bz0s),color='blue',linestyle='-',label='$B_z$ (smooth)')
+
+    ylim = ax0.get_ylim()
+    ax0.set_ylim(ylim)
+    D = cfg['d']
+    ax0.vlines([-D,0.0,+D],ylim[0],ylim[1],color='grey',linestyle=':')
+    ax0.legend()
+
+    ax1.plot(zm,Bx1-np.nanmean(Bx1),color='red',linestyle='--',label='$B_x$')
+    ax1.plot(zm,By1-np.nanmean(By1),color='green',linestyle='--',label='$B_y$')
+    ax1.plot(zm,Bz1-np.nanmean(Bz1),color='blue',linestyle='--',label='$B_z$')
+
+    ax1.plot(zm,Bx1-np.nanmean(Bx1s),color='red',linestyle='-',label='$B_x$ (smooth)')
+    ax1.plot(zm,By1-np.nanmean(By1s),color='green',linestyle='-',label='$B_y$ (smooth)')
+    ax1.plot(zm,Bz1-np.nanmean(Bz1s),color='blue',linestyle='-',label='$B_z$ (smooth)')
+
+    ylim = ax1.get_ylim()
+    ax1.set_ylim(ylim)
+    ax1.vlines([-D,0.0,+D],ylim[0],ylim[1],color='grey',linestyle=':')
+    ax1.legend()
+
+    ax0.set_xlabel('$z_{mag}$ (R$_J$)')
+    ax1.set_xlabel('$z_{mag}$ (R$_J$)')
+
+    plt.savefig('testsmoothz.png')
+    plt.close()
+
+
 if __name__ == '__main__':
     
     testSmooth()
+    testSmoothZ()
