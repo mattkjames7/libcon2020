@@ -194,7 +194,7 @@ void saveLibHeader(std::filesystem::path srcPath) {
     std::string headerCode = generateLibHeader();
 
     std::filesystem::path headerPath = srcPath.parent_path();
-    headerPath /= "include/con2020.test.h";
+    headerPath /= "include/con2020.h";
     std::cout << "Saving library header: " << std::endl;
     std::cout << "\t" << headerPath << std::endl;
     std::ofstream file(headerPath);
