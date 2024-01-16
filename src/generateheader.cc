@@ -20,9 +20,9 @@ std::vector<std::string> getVersion() {
     std::getline(ss, pa);
 
     std::vector<std::string> out = {
-        "#define LIBSPLINE_VERSION_MAJOR " + mj + "\n",
-        "#define LIBSPLINE_VERSION_MINOR " + mn + "\n",
-        "#define LIBSPLINE_VERSION_PATCH " + pa + "\n",
+        "#define LIBCON2020_VERSION_MAJOR " + mj + "\n",
+        "#define LIBCON2020_VERSION_MINOR " + mn + "\n",
+        "#define LIBCON2020_VERSION_PATCH " + pa + "\n",
     };
 
     return out;
