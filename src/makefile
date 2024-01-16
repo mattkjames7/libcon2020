@@ -18,17 +18,40 @@ else
 	LIBFILE=libcon2020.dylib
 endif
 
-all: obj lib 
+all: header obj lib 
 
-obj:
+header:
+	$(CC) trimstring.cc generateheader.cc -o generateheader
+	./generateheader
+	-rm generateheader
+
+obj: con2020 bessel polyeval trap smoothd libcon2020 scalarpot flux lmic
+
+con2020:
 	$(CCo) con2020.cc -o $(BUILDDIR)/con2020.o 
+
+bessel:
 	$(CCo) bessel.cc -o $(BUILDDIR)/bessel.o 
+
+polyeval:
 	$(CCo) polyeval.cc -o $(BUILDDIR)/polyeval.o 
+
+trap:
 	$(CCo) trap.cc -o $(BUILDDIR)/trap.o 
+
+smoothd:
 	$(CCo) smoothd.cc -o $(BUILDDIR)/smoothd.o 
+
+libcon2020:
 	$(CCo) libcon2020.cc -o $(BUILDDIR)/libcon2020.o
+
+scalarpot:
 	$(CCo) scalarpot.cc -o $(BUILDDIR)/scalarpot.o
+
+flux:
 	$(CCo) flux.cc -o $(BUILDDIR)/flux.o
+
+lmic:
 	$(CCo) lmic.cc -o $(BUILDDIR)/lmic.o
 
 lib:
