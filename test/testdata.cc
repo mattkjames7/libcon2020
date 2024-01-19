@@ -143,13 +143,13 @@ bool compareVectors(
     std::vector<double> bx0, std::vector<double> by0, std::vector<double> bz0,
     std::vector<double> bx1, std::vector<double> by1, std::vector<double> bz1
 ) {
-    int n = bx0.size();
+    size_t n = bx0.size();
     if ((bx1.size() != n) || (by1.size() != n) || (bz1.size() != n) || 
         (by0.size() != n) || (bz0.size() != n)) {
         return false;
     }
 
-    int i;
+    unsigned int i;
     for (i=0;i<n;i++) {
         if ((bx0[i] != bx1[i]) || (by0[i] != by1[i]) || (bz0[i] != bz1[i])) {
             return false;
