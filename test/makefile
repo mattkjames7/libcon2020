@@ -28,5 +28,9 @@ all:
 	python3 lmic.py
 	python3 testsmooth.py
 
+save:
+	$(CC) testdata.cc savetestdata.cc -o savetestdata $(LDFLAGS) 
+	./savetestdata
+
 clean:
 	-rm -v testbessel

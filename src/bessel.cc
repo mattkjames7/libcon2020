@@ -317,7 +317,7 @@ void j1(int n, double *x, double multx, double *j) {
 
 
 
-void j0h(int n, double *x, double *j) {
+void j0m(int n, double *x, double *j) {
 	
 	/* define the parameters for this approx. */
 	double lambda = 0.865;
@@ -353,7 +353,7 @@ void j0h(int n, double *x, double *j) {
 		
 }
 
-void j0h(int n, double *x, double multx, double *j) {
+void j0m(int n, double *x, double multx, double *j) {
 	
 	/* define the parameters for this approx. */
 	double lambda = 0.865;
@@ -390,7 +390,7 @@ void j0h(int n, double *x, double multx, double *j) {
 		
 }
 
-void j1h(int n, double *x, double *j) {
+void j1m(int n, double *x, double *j) {
 	
 	/* parameters from the paper */
 	double lambda = 0.1;
@@ -423,7 +423,7 @@ void j1h(int n, double *x, double *j) {
 
 }
 
-void j1h(int n, double *x, double multx, double *j) {
+void j1m(int n, double *x, double multx, double *j) {
 	
 	/* parameters from the paper */
 	double lambda = 0.1;

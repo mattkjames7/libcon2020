@@ -435,6 +435,13 @@ void j1(int n, double *x, double multx, double *j);
 
 
 
+void j0m(int n, double *x, double *j);
+void j1m(int n, double *x, double *j);
+
+void j0m(int n, double *x, double multx, double *j);
+void j1m(int n, double *x, double multx, double *j);
+
+
 
 
 
