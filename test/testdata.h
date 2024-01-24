@@ -24,6 +24,10 @@ bool compareVectors(
     std::vector<double> bx0, std::vector<double> by0, std::vector<double> bz0,
     std::vector<double> bx1, std::vector<double> by1, std::vector<double> bz1
 );
+bool compareVectors(
+    std::tuple<std::vector<double>,std::vector<double>,std::vector<double>> b0,
+    std::tuple<std::vector<double>,std::vector<double>,std::vector<double>> b1
+);
 
 void readVectorsC(
     const char *testFile,

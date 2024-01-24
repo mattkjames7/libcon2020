@@ -157,3 +157,18 @@ bool compareVectors(
     }
     return true;
 }
+
+bool compareVectors(
+    std::tuple<std::vector<double>,std::vector<double>,std::vector<double>> b0,
+    std::tuple<std::vector<double>,std::vector<double>,std::vector<double>> b1
+) {
+    std::vector<double> bx0 = std::get<0>(b0);
+    std::vector<double> by0 = std::get<1>(b0);
+    std::vector<double> bz0 = std::get<2>(b0);
+
+    std::vector<double> bx1 = std::get<0>(b1);
+    std::vector<double> by1 = std::get<1>(b1);
+    std::vector<double> bz1 = std::get<2>(b1);
+
+    return compareVectors(bx0,by0,bz0,bx1,by1,bz1);
+}

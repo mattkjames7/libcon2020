@@ -18,6 +18,10 @@ else
 endif
 
 all:
+
+	$(CC) testdata.cc tests.cc -o tests $(LDFLAGS)
+	./tests
+
 	$(CC) testbessel.cc -o testbessel	$(LDFLAGS) 
 	gcc $(IFLAGS) -fPIC -lm -O3 testc.c -o testc $(LDFLAGS) 
 	$(CC) testc.cc -o testcc $(LDFLAGS) 
@@ -27,6 +31,7 @@ all:
 	python3 testbessel.py
 	python3 lmic.py
 	python3 testsmooth.py
+
 
 save:
 	$(CC) testdata.cc savetestdata.cc -o savetestdata $(LDFLAGS) 
