@@ -113,7 +113,7 @@ class Con2020 {
 		double mui_,irho_,r0_,r1_,d_,xt_,xp_,disctilt_,discshift_;
 		double r0sq_, r1sq_;
 		double cosxp_,sinxp_,cosxt_,sinxt_;
-		char eqtype_[9];
+		char eqtype_[9], outereqtype_[9];
 		bool Edwards_, ErrChk_;
 		bool CartIn_,CartOut_;
 		double deltaz_,deltarho_;

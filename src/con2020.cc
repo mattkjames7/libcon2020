@@ -148,6 +148,21 @@ void Con2020::_SetModelFunctions() {
 		printf("What's going on here then?\n");
 	}
 
+	/* set function to use for outer contribution
+	(analytic, integral) */
+	if (strcmp(eqtype_,"analytic") == 0) {
+		if (smooth_) {
+			_Model = &Con2020::_AnalyticOuterSmooth;
+		} else {
+			_Model = &Con2020::_AnalyticOuter;
+		}
+	} else if (strcmp(eqtype_,"integral") == 0) {
+		_Model = &Con2020::_Integral;
+	} else {
+		printf("What's going on here then?\n");
+	}
+
+
 	/* set the azimuthal function */
 	if (strcmp(azfunc_,"connerney") == 0) {
 		_AzimuthalField = &Con2020::_BphiConnerney;
