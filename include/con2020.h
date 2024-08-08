@@ -465,7 +465,7 @@ typedef void (Con2020::*OutputConvFunc)(int,double*,double*,double*,
 typedef void (Con2020::*ModelFunc)(double,double,double,double*,double*,double*);
 
 /* analytical approximation equations */
-typedef void (Con2020::*Approx)(double,double,double,double,double,double*,double*);
+typedef void (Con2020::*ApproxEq)(double,double,double,double,double,double*,double*);
 
 /* azimuthal function */
 typedef void (Con2020::*AzimFunc)(double,double,double,double*);
@@ -622,8 +622,8 @@ class Con2020 {
 		void _BphiConnerney(int,double*,double*,double*,double*);
 		void _BphiConnerney(double,double,double,double*);
 		void _BphiLMIC(double,double,double,double*);
-		Approx _LargeRho;
-		Approx _SmallRho;		
+		ApproxEq _LargeRho;
+		ApproxEq _SmallRho;		
 		/* analytic equations */
 		void _Analytic(double,double,double,double*,double*,double*);
 		void _AnalyticSmooth(double,double,double,double*,double*,double*);

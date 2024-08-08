@@ -18,6 +18,8 @@ else
 endif
 
 all:
+	$(CC) bessel.cc -o bessel $(LDFLAGS)
+	./bessel
 
 	$(CC) testdata.cc tests.cc -o tests $(LDFLAGS)
 	./tests
