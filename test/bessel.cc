@@ -1,6 +1,6 @@
 #include "con2020.h"
 #define CATCH_CONFIG_MAIN
-#include <catch2/catch.hpp>
+#include <catch2/catch_test_macros.hpp>
 #include <vector>
 
 bool compareVectors(
@@ -36,7 +36,7 @@ TEST_CASE("Bessel function j0(x) test cases", "[j0(x)]") {
     size_t i;
     for (i=0;i<x.size();i++) {
         result = j0(x[i]);
-        REQUIRE(result == Approx(expected[i]).epsilon(1e-12));
+        REQUIRE(result == ApproxEq(expected[i]).epsilon(1e-12));
     }
 
 }
@@ -89,7 +89,7 @@ TEST_CASE("Bessel function j1(x) test cases", "[j1(x)]") {
     size_t i;
     for (i=0;i<x.size();i++) {
         result = j1(x[i]);
-        REQUIRE(result == Approx(expected[i]).epsilon(1e-12));
+        REQUIRE(result == ApproxEq(expected[i]).epsilon(1e-12));
     }
 
 }
