@@ -17,7 +17,14 @@ else
 	LDFLAGS=-L ../lib -lcon2020
 endif
 
-all:
+json:
+	git clone https://github.com/nlohmann/json.git
+	cd json && \
+	git checkout v3.12.0
+
+all: json
+	$(CC) save_test_data.cc -o save_test_data $(LDFLAGS) -Ijson/include
+	./save_test_data
 	$(CC) testbessel.cc -o testbessel	$(LDFLAGS) 
 	gcc $(IFLAGS) -fPIC -lm -O3 testc.c -o testc $(LDFLAGS) 
 	$(CC) testc.cc -o testcc $(LDFLAGS) 
