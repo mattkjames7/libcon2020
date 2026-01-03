@@ -23,7 +23,7 @@ json:
 	git checkout v3.12.0
 
 all: json
-	$(CC) save_test_data.cc -o save_test_data $(LDFLAGS) -Ijson/include
+	$(CC) save_test_data.cc -o save_test_data $(LDFLAGS) -Ijson/include -lz
 	./save_test_data
 	$(CC) testbessel.cc -o testbessel	$(LDFLAGS) 
 	gcc $(IFLAGS) -fPIC -lm -O3 testc.c -o testc $(LDFLAGS) 

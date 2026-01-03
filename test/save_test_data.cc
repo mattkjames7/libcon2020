@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <zlib.h>
 
 
 template <std::size_t N, typename T = double>
@@ -91,9 +92,18 @@ int main() {
         all_data[eqtype] = collect_model_data(eqtype);
     }
 
-    // Save to file
-    std::ofstream file("con2020_test_data.json");
-    file << all_data.dump(2); // Pretty print with 2 spaces indentation
-    file.close();
+    // Serialize JSON to string
+    std::string json_str = all_data.dump(2);
+
+    // Open gzip file
+    gzFile gz = gzopen("con2020_test_data.json.gz", "wb");
+    if (!gz) {
+        throw std::runtime_error("Failed to open gzip file");
+    }
+
+    // Write compressed data
+    gzwrite(gz, json_str.data(), json_str.size());
+    gzclose(gz);
+
     return 0;
 }
