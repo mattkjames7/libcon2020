@@ -85,18 +85,40 @@ nlohmann::json collect_model_data(std::string eqtype) {
 }
 
 
-int main() {
-    auto eqtypes = {std::string("hybrid"), std::string("analytic"), std::string("integral")};
-    nlohmann::json all_data;
-    for (const auto& eqtype : eqtypes) {
-        all_data[eqtype] = collect_model_data(eqtype);
-    }
+nlohmann::json collect_bessel_data() {
+    const std::size_t N = 1000;
+    auto x_vals0 = random_array<N>(0.0, 5.0);
+    auto x_vals1 = random_array<N>(5.0, 10.0);
+
+    std::array<double, N> j0_vals0;
+    std::array<double, N> j0_vals1;
+    std::array<double, N> j1_vals0;
+    std::array<double, N> j1_vals1;
+
+    j0(N, x_vals0.data(), j0_vals0.data());
+    j0(N, x_vals1.data(), j0_vals1.data());
+    j1(N, x_vals0.data(), j1_vals0.data());
+    j1(N, x_vals1.data(), j1_vals1.data());
+
+    // Collect data into JSON
+    nlohmann::json bessel_data;
+    bessel_data["x0"] = x_vals0;
+    bessel_data["x1"] = x_vals1;
+    bessel_data["j0_0"] = j0_vals0;
+    bessel_data["j0_1"] = j0_vals1;
+    bessel_data["j1_0"] = j1_vals0;
+    bessel_data["j1_1"] = j1_vals1;
+    return bessel_data;
+}
+
+
+void save_json_gz(const nlohmann::json& data, const std::string& filename) {
 
     // Serialize JSON to string
-    std::string json_str = all_data.dump(2);
+    std::string json_str = data.dump(2);
 
     // Open gzip file
-    gzFile gz = gzopen("con2020_test_data.json.gz", "wb");
+    gzFile gz = gzopen(filename.c_str(), "wb");
     if (!gz) {
         throw std::runtime_error("Failed to open gzip file");
     }
@@ -104,6 +126,28 @@ int main() {
     // Write compressed data
     gzwrite(gz, json_str.data(), json_str.size());
     gzclose(gz);
+}
 
+
+void save_test_data() {
+    auto eqtypes = {std::string("hybrid"), std::string("analytic"), std::string("integral")};
+    nlohmann::json all_data;
+    for (const auto& eqtype : eqtypes) {
+        all_data[eqtype] = collect_model_data(eqtype);
+    }
+
+    save_json_gz(all_data, "test_data.json.gz");
+}
+
+
+void save_bessel_data() {
+    nlohmann::json bessel_data = collect_bessel_data();
+    save_json_gz(bessel_data, "bessel_data.json.gz");
+}
+
+
+int main() {
+    save_test_data();
+    save_bessel_data();
     return 0;
 }
