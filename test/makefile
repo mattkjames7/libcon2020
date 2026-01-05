@@ -24,6 +24,9 @@ json:
 	git checkout v3.12.0
 
 all: json
+	$(CC) unit/bessel.cc -o bessel_tests $(LDFLAGS) -Ijson/include -lz
+	./bessel_tests
+
 	$(CC) bessel.cc -o bessel $(LDFLAGS)
 	./bessel
 
