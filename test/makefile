@@ -35,25 +35,11 @@ all: json
 	$(CC) unit/bessel.cc -o bessel_tests $(LDFLAGS) -Ijson/include -lz
 	./bessel_tests
 
-
-
-	$(CC) bessel.cc -o bessel $(LDFLAGS)
-	./bessel
-
-	$(CC) testdata.cc tests.cc -o tests $(LDFLAGS)
-	./tests
-
-
-	$(CC) testbessel.cc -o testbessel	$(LDFLAGS) 
-	gcc $(IFLAGS) -fPIC -lm -O3 testc.c -o testc $(LDFLAGS) 
-	$(CC) testc.cc -o testcc $(LDFLAGS) 
-	./testc
-	./testcc
-	./testbessel
 	python3 testbessel.py
 	python3 lmic.py
 	python3 testsmooth.py
 
 
 clean:
-	-rm -v testbessel
+	-rm -v bessel_tests model_output_tests save_test_data
+	-rm -rf json
