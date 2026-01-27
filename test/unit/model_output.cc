@@ -128,3 +128,135 @@ TEST(ModelOutputTests, TestSphericalFieldAnalytic) {
         EXPECT_NEAR(Bphi_computed[i], Bphi_expected[i], 1e-6) << "at index " << i;
     }
 }
+
+
+TEST(ModelOutputTests, TestCartesianFieldHybrid) {
+    const nlohmann::json test_data = read_json_gz("test_data.json.gz");
+
+    const std::string eqtype = "hybrid";
+    auto cartesian = array_to_object(test_data[eqtype]["cartesian"]);
+    auto x_vals = cartesian["x"].get<std::vector<double>>();
+    auto y_vals = cartesian["y"].get<std::vector<double>>();
+    auto z_vals = cartesian["z"].get<std::vector<double>>();
+    auto Bx_expected = cartesian["Bx"].get<std::vector<double>>();
+    auto By_expected = cartesian["By"].get<std::vector<double>>();
+    auto Bz_expected = cartesian["Bz"].get<std::vector<double>>();
+    const size_t N = x_vals.size();
+
+    std::vector<double> Bx_computed(N);
+    std::vector<double> By_computed(N);
+    std::vector<double> Bz_computed(N);
+
+    std::tie(Bx_computed, By_computed, Bz_computed) = get_model_vectors(
+        eqtype,
+        true,
+        x_vals,
+        y_vals,
+        z_vals
+    );
+
+    for (size_t i = 0; i < N; ++i) {
+        EXPECT_NEAR(Bx_computed[i], Bx_expected[i], 1e-6) << "at index " << i;
+        EXPECT_NEAR(By_computed[i], By_expected[i], 1e-6) << "at index " << i;
+        EXPECT_NEAR(Bz_computed[i], Bz_expected[i], 1e-6) << "at index " << i;
+    }
+}
+
+
+TEST(ModelOutputTests, TestSphericalFieldHybrid) {
+    const nlohmann::json test_data = read_json_gz("test_data.json.gz");
+
+    const std::string eqtype = "hybrid";
+    auto spherical = array_to_object(test_data[eqtype]["spherical"]);
+    auto r_vals = spherical["r"].get<std::vector<double>>();
+    auto theta_vals = spherical["theta"].get<std::vector<double>>();
+    auto phi_vals = spherical["phi"].get<std::vector<double>>();
+    auto Br_expected = spherical["Br"].get<std::vector<double>>();
+    auto Btheta_expected = spherical["Btheta"].get<std::vector<double>>();
+    auto Bphi_expected = spherical["Bphi"].get<std::vector<double>>();
+    const size_t N = r_vals.size();
+
+    std::vector<double> Br_computed(N);
+    std::vector<double> Btheta_computed(N);
+    std::vector<double> Bphi_computed(N);
+
+    std::tie(Br_computed, Btheta_computed, Bphi_computed) = get_model_vectors(
+        eqtype,
+        false,
+        r_vals,
+        theta_vals,
+        phi_vals
+    );
+
+    for (size_t i = 0; i < N; ++i) {
+        EXPECT_NEAR(Br_computed[i], Br_expected[i], 1e-6) << "at index " << i;
+        EXPECT_NEAR(Btheta_computed[i], Btheta_expected[i], 1e-6) << "at index " << i;
+        EXPECT_NEAR(Bphi_computed[i], Bphi_expected[i], 1e-6) << "at index " << i;
+    }
+}
+
+
+TEST(ModelOutputTests, TestCartesianFieldIntegral) {
+    const nlohmann::json test_data = read_json_gz("test_data.json.gz");
+
+    const std::string eqtype = "integral";
+    auto cartesian = array_to_object(test_data[eqtype]["cartesian"]);
+    auto x_vals = cartesian["x"].get<std::vector<double>>();
+    auto y_vals = cartesian["y"].get<std::vector<double>>();
+    auto z_vals = cartesian["z"].get<std::vector<double>>();
+    auto Bx_expected = cartesian["Bx"].get<std::vector<double>>();
+    auto By_expected = cartesian["By"].get<std::vector<double>>();
+    auto Bz_expected = cartesian["Bz"].get<std::vector<double>>();
+    const size_t N = x_vals.size();
+
+    std::vector<double> Bx_computed(N);
+    std::vector<double> By_computed(N);
+    std::vector<double> Bz_computed(N);
+
+    std::tie(Bx_computed, By_computed, Bz_computed) = get_model_vectors(
+        eqtype,
+        true,
+        x_vals,
+        y_vals,
+        z_vals
+    );
+
+    for (size_t i = 0; i < N; ++i) {
+        EXPECT_NEAR(Bx_computed[i], Bx_expected[i], 1e-6) << "at index " << i;
+        EXPECT_NEAR(By_computed[i], By_expected[i], 1e-6) << "at index " << i;
+        EXPECT_NEAR(Bz_computed[i], Bz_expected[i], 1e-6) << "at index " << i;
+    }
+}
+
+
+TEST(ModelOutputTests, TestSphericalFieldIntegral) {
+    const nlohmann::json test_data = read_json_gz("test_data.json.gz");
+
+    const std::string eqtype = "integral";
+    auto spherical = array_to_object(test_data[eqtype]["spherical"]);
+    auto r_vals = spherical["r"].get<std::vector<double>>();
+    auto theta_vals = spherical["theta"].get<std::vector<double>>();
+    auto phi_vals = spherical["phi"].get<std::vector<double>>();
+    auto Br_expected = spherical["Br"].get<std::vector<double>>();
+    auto Btheta_expected = spherical["Btheta"].get<std::vector<double>>();
+    auto Bphi_expected = spherical["Bphi"].get<std::vector<double>>();
+    const size_t N = r_vals.size();
+
+    std::vector<double> Br_computed(N);
+    std::vector<double> Btheta_computed(N);
+    std::vector<double> Bphi_computed(N);
+
+    std::tie(Br_computed, Btheta_computed, Bphi_computed) = get_model_vectors(
+        eqtype,
+        false,
+        r_vals,
+        theta_vals,
+        phi_vals
+    );
+
+    for (size_t i = 0; i < N; ++i) {
+        EXPECT_NEAR(Br_computed[i], Br_expected[i], 1e-6) << "at index " << i;
+        EXPECT_NEAR(Btheta_computed[i], Btheta_expected[i], 1e-6) << "at index " << i;
+        EXPECT_NEAR(Bphi_computed[i], Bphi_expected[i], 1e-6) << "at index " << i;
+    }
+}
