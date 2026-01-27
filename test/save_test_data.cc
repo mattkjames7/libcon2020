@@ -25,6 +25,8 @@ std::array<T, N> random_array(T min, T max) {
 nlohmann::json collect_model_data(std::string eqtype) {
     const std::size_t N = 100;
 
+    Con2020 model;
+
     // Generate random test data (cartesian)
     auto x_vals = random_array<N>(-60.0, 60.0);
     auto y_vals = random_array<N>(-60.0, 60.0);
@@ -46,18 +48,20 @@ nlohmann::json collect_model_data(std::string eqtype) {
     std::array<double, N> Bphi_vals;
 
     // set model type
-    con2020.SetEqType(eqtype.c_str());
+    model.SetEqType(eqtype.c_str());
 
     // Compute magnetic field for each set of coordinates
-    con2020.Field(
+    model.SetCartIn(true);
+    model.SetCartOut(true);
+    model.Field(
         N,
         x_vals.data(), y_vals.data(), z_vals.data(),
         Bx_vals.data(), By_vals.data(), Bz_vals.data()
     );
 
-    con2020.SetCartIn(false);
-    con2020.SetCartOut(false);
-    con2020.Field(
+    model.SetCartIn(false);
+    model.SetCartOut(false);
+    model.Field(
         N,
         r_vals.data(), theta_vals.data(), phi_vals.data(),
         Br_vals.data(), Btheta_vals.data(), Bphi_vals.data()

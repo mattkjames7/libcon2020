@@ -1,5 +1,5 @@
 # CFLAGS for CC
-CFLAGS=-std=c++17 -Wextra -O3
+CFLAGS=-std=c++23 -Wextra -O3
 
 #includeflags
 IFLAGS=-I../include
@@ -23,9 +23,19 @@ json:
 	cd json && \
 	git checkout v3.12.0
 
+save:
+	$(CC) save_test_data.cc -o save_test_data $(LDFLAGS) -Ijson/include -lz
+	./save_test_data
+
+
 all: json
+	$(CC) unit/model_output.cc -o model_output_tests $(LDFLAGS) -Ijson/include -lz
+	./model_output_tests
+
 	$(CC) unit/bessel.cc -o bessel_tests $(LDFLAGS) -Ijson/include -lz
 	./bessel_tests
+
+
 
 	$(CC) bessel.cc -o bessel $(LDFLAGS)
 	./bessel
@@ -33,8 +43,7 @@ all: json
 	$(CC) testdata.cc tests.cc -o tests $(LDFLAGS)
 	./tests
 
-	$(CC) save_test_data.cc -o save_test_data $(LDFLAGS) -Ijson/include -lz
-	./save_test_data
+
 	$(CC) testbessel.cc -o testbessel	$(LDFLAGS) 
 	gcc $(IFLAGS) -fPIC -lm -O3 testc.c -o testc $(LDFLAGS) 
 	$(CC) testc.cc -o testcc $(LDFLAGS) 
@@ -45,10 +54,6 @@ all: json
 	python3 lmic.py
 	python3 testsmooth.py
 
-
-save:
-	$(CC) testdata.cc savetestdata.cc -o savetestdata $(LDFLAGS) 
-	./savetestdata
 
 clean:
 	-rm -v testbessel
