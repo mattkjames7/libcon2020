@@ -1,5 +1,5 @@
 # CFLAGS for CC
-CFLAGS=-lm -std=c++17 -Wextra -O3
+CFLAGS=-std=c++23 -Wextra -O3
 
 #includeflags
 IFLAGS=-I../include
@@ -12,28 +12,34 @@ CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS) $(IFLAGS)
 
 OS=$(shell uname -s)
 ifeq ($(OS),Linux) 
-	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lcon2020
+	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lcon2020 -lgtest -lgtest_main -lm
 else 
-	LDFLAGS=-L ../lib -lcon2020
+	LDFLAGS=-L ../lib -lcon2020 -lgtest -lgtest_main -lm
 endif
+
 
 json:
 	git clone https://github.com/nlohmann/json.git
 	cd json && \
 	git checkout v3.12.0
 
-all: json
+save:
 	$(CC) save_test_data.cc -o save_test_data $(LDFLAGS) -Ijson/include -lz
 	./save_test_data
-	$(CC) testbessel.cc -o testbessel	$(LDFLAGS) 
-	gcc $(IFLAGS) -fPIC -lm -O3 testc.c -o testc $(LDFLAGS) 
-	$(CC) testc.cc -o testcc $(LDFLAGS) 
-	./testc
-	./testcc
-	./testbessel
+
+
+all: json
+	$(CC) unit/model_output.cc -o model_output_tests $(LDFLAGS) -Ijson/include -lz
+	./model_output_tests
+
+	$(CC) unit/bessel.cc -o bessel_tests $(LDFLAGS) -Ijson/include -lz
+	./bessel_tests
+
 	python3 testbessel.py
 	python3 lmic.py
 	python3 testsmooth.py
 
+
 clean:
-	-rm -v testbessel
+	-rm -v bessel_tests model_output_tests save_test_data
+	-rm -rf json
