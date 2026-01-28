@@ -1,9 +1,10 @@
 # CFLAGS for CC
-CFLAGS=-lm -fPIC -std=c++17 -Wextra -O3
+CFLAGS=-fPIC -std=c++17 -Wextra -O3
+LDFLAGS=-lm
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
-CC=g++ $(CFLAGS)
+CC=g++ $(CFLAGS) $(LDFLAGS)
 CCWo=x86_64-w64-mingw32-g++-win32 -c $(CFLAGS)
 CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS)
 
@@ -55,7 +56,7 @@ lmic:
 	$(CCo) lmic.cc -o $(BUILDDIR)/lmic.o
 
 lib:
-	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/$(LIBFILE)
+	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/$(LIBFILE) $(LDFLAGS)
 	
 winobj:
 	$(CCWo) con2020.cc -o $(BUILDDIR)/con2020.o 
@@ -72,5 +73,5 @@ winlib:
 	$(CCW) $(BUILDDIR)/*.o -shared -o ../lib/libcon2020.dll
 
 test:
-	$(CC) test.cc *.o -o test
+	$(CC) test.cc *.o -o test $(LDFLAGS)
 
