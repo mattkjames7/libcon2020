@@ -14,7 +14,7 @@ OS=$(shell uname -s)
 ifeq ($(OS),Linux) 
 	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm
 else 
-	LDFLAGS=-L ../lib -lcon2020 -Lgoogletest/install/lib -lgtest -lgtest_main -lm
+	LDFLAGS=-L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm
 endif
 
 
