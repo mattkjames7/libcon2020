@@ -1,5 +1,5 @@
 # CFLAGS for CC
-CFLAGS=-std=c++23 -Wextra -O3
+CFLAGS=-std=c++17 -Wextra -O3
 
 #includeflags
 IFLAGS=-I../include
@@ -13,7 +13,10 @@ CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS) $(IFLAGS)
 OS=$(shell uname -s)
 ifeq ($(OS),Linux) 
 	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm
-else 
+else ifeq ($(OS),Darwin)
+	LDFLAGS=-L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm
+	CFLAGS+=-fvisibility=default
+else
 	LDFLAGS=-L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm
 endif
 
