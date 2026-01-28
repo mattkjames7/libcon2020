@@ -1,7 +1,6 @@
 name: "Build and Test"
 
 on: 
-  push:
   pull_request:
   workflow_dispatch:
   schedule:
@@ -11,7 +10,6 @@ run-name: "Build and Test Library"
 
 jobs:
   build_linux:
-    if: ${{ github.event_name != 'push' }}
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout current branch
@@ -40,7 +38,6 @@ jobs:
 
 
   build_windows:
-    if: ${{ github.event_name != 'push' }}
     runs-on: "windows-latest"
     steps:
       - name: Checkout current branch
@@ -102,16 +99,6 @@ jobs:
           # cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install"
           # cmake --build build -j
           make -j$(sysctl -n hw.ncpu)
-
-      - name: Debug prints
-        run: |
-          ls build/
-          uname -m
-          ls -l test/../lib
-          file test/../lib/libcon2020.*
-          lipo -info test/../lib/libcon2020.* 2>/dev/null || true
-          nm -gU test/../lib/libcon2020.* | grep -E "Con2020::SetCartOut|Con2020::SetCartIn|Con2020::SetEqType|Con2020::Field|_con2020" || true
-
 
       - name: Run Tests
         run: |
