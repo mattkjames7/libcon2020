@@ -1,9 +1,10 @@
 # CFLAGS for CC
-CFLAGS=-lm -fPIC -std=c++17 -Wextra -O3
+CFLAGS=-fPIC -std=c++17 -Wextra -O3
+LDFLAGS=-lm
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
-CC=g++ $(CFLAGS)
+CC=g++ $(CFLAGS) $(LDFLAGS)
 CCWo=x86_64-w64-mingw32-g++-win32 -c $(CFLAGS)
 CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS)
 
@@ -15,10 +16,15 @@ OS=$(shell uname -s)
 ifeq ($(OS),Linux)
 	LIBFILE=libcon2020.so
 else
-	LIBFILE=libcon2020.dylib
+	ifeq ($(OS),Darwin)
+		LIBFILE=libcon2020.dylib
+		CFLAGS+=-fvisibility=default
+	else
+		LIBFILE=libcon2020.dll
+	endif
 endif
 
-all: header obj lib 
+all: obj lib
 
 header:
 	$(CC) trimstring.cc generateheader.cc -o generateheader
@@ -54,8 +60,13 @@ flux:
 lmic:
 	$(CCo) lmic.cc -o $(BUILDDIR)/lmic.o
 
-lib:
-	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/$(LIBFILE)
+lib: obj
+ifeq ($(OS),Darwin)
+	$(CC) $(BUILDDIR)/con2020.o ${BUILDDIR}/bessel.o ${BUILDDIR}/polyeval.o ${BUILDDIR}/trap.o ${BUILDDIR}/smoothd.o ${BUILDDIR}/libcon2020.o ${BUILDDIR}/scalarpot.o ${BUILDDIR}/flux.o ${BUILDDIR}/lmic.o -dynamiclib -o ../lib/$(LIBFILE) $(LDFLAGS)
+	install_name_tool -id @loader_path/../lib/$(LIBFILE) ../lib/$(LIBFILE)
+else
+	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/$(LIBFILE) $(LDFLAGS)
+endif
 	
 winobj:
 	$(CCWo) con2020.cc -o $(BUILDDIR)/con2020.o 
@@ -72,5 +83,5 @@ winlib:
 	$(CCW) $(BUILDDIR)/*.o -shared -o ../lib/libcon2020.dll
 
 test:
-	$(CC) test.cc *.o -o test
+	$(CC) test.cc *.o -o test $(LDFLAGS)
 

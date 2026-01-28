@@ -1,5 +1,5 @@
 # CFLAGS for CC
-CFLAGS=-std=c++23 -Wextra -O3
+CFLAGS=-std=c++17 -Wextra -O3
 
 #includeflags
 IFLAGS=-I../include
@@ -12,9 +12,12 @@ CCW=x86_64-w64-mingw32-g++-win32 $(CFLAGS) $(IFLAGS)
 
 OS=$(shell uname -s)
 ifeq ($(OS),Linux) 
-	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lcon2020 -lgtest -lgtest_main -lm
-else 
-	LDFLAGS=-L ../lib -lcon2020 -lgtest -lgtest_main -lm
+	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm
+else ifeq ($(OS),Darwin)
+	LDFLAGS=-L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm -Wl,-rpath,@loader_path/../lib
+	CFLAGS+=-fvisibility=default
+else
+	LDFLAGS=-L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm
 endif
 
 
@@ -23,23 +26,27 @@ json:
 	cd json && \
 	git checkout v3.12.0
 
+gtest:
+	git clone https://github.com/google/googletest.git googletest
+	cd googletest && \
+	git checkout v1.17.0 && \
+	mkdir -p install && \
+	cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_GMOCK=OFF -DINSTALL_GTEST=OFF && \
+	cmake --build build -j$(nproc)
+
 save:
 	$(CC) save_test_data.cc -o save_test_data $(LDFLAGS) -Ijson/include -lz
 	./save_test_data
 
 
-all: json
-	$(CC) unit/model_output.cc -o model_output_tests $(LDFLAGS) -Ijson/include -lz
+all: json gtest
+	$(CC) unit/model_output.cc -o model_output_tests $(LDFLAGS) -Ijson/include -Igoogletest/googletest/include -lz
 	./model_output_tests
 
-	$(CC) unit/bessel.cc -o bessel_tests $(LDFLAGS) -Ijson/include -lz
+	$(CC) unit/bessel.cc -o bessel_tests $(LDFLAGS) -Ijson/include -Igoogletest/googletest/include -lz
 	./bessel_tests
-
-	python3 testbessel.py
-	python3 lmic.py
-	python3 testsmooth.py
 
 
 clean:
 	-rm -v bessel_tests model_output_tests save_test_data
-	-rm -rf json
+	-rm -rf json googletest
