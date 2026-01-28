@@ -14,7 +14,7 @@ OS=$(shell uname -s)
 ifeq ($(OS),Linux) 
 	LDFLAGS=-Wl,-rpath='$$ORIGIN/../lib' -L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm
 else ifeq ($(OS),Darwin)
-	LDFLAGS=-L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm
+	LDFLAGS=-L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm -Wl,-rpath,@loader_path/../lib
 	CFLAGS+=-fvisibility=default
 else
 	LDFLAGS=-L ../lib -lcon2020 -Lgoogletest/build/lib -lgtest -lgtest_main -lm

@@ -62,6 +62,9 @@ lmic:
 
 lib:
 	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/$(LIBFILE) $(LDFLAGS)
+	ifeq ($(OS),Darwin)
+		install_name_tool -id @loader_path/../lib/$(LIBFILE) ../lib/$(LIBFILE)
+	endif
 	
 winobj:
 	$(CCWo) con2020.cc -o $(BUILDDIR)/con2020.o 
