@@ -18,6 +18,7 @@ ifeq ($(OS),Linux)
 else
 	ifeq ($(OS),Darwin)
 		LIBFILE=libcon2020.dylib
+		CFLAGS+=-fvisibility=default
 	else
 		LIBFILE=libcon2020.dll
 	endif
