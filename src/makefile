@@ -62,7 +62,7 @@ lmic:
 
 lib:
 ifeq ($(OS),Darwin)
-	$(CC) $(BUILDDIR)/*.o -dynamiclib -o ../lib/$(LIBFILE) $(LDFLAGS)
+	$(CC) $(BUILDDIR)/con2020.o ${BUILDDIR}/bessel.o ${BUILDDIR}/polyeval.o ${BUILDDIR}/trap.o ${BUILDDIR}/smoothd.o ${BUILDDIR}/libcon2020.o ${BUILDDIR}/scalarpot.o ${BUILDDIR}/flux.o ${BUILDDIR}/lmic.o -dynamiclib -o ../lib/$(LIBFILE) $(LDFLAGS)
 	install_name_tool -id @loader_path/../lib/$(LIBFILE) ../lib/$(LIBFILE)
 else
 	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/$(LIBFILE) $(LDFLAGS)
