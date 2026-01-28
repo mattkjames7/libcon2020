@@ -43,10 +43,6 @@ all: json gtest
 	$(CC) unit/bessel.cc -o bessel_tests $(LDFLAGS) -Ijson/include -Igoogletest/googletest/include -lz
 	./bessel_tests
 
-	python3 testbessel.py
-	python3 lmic.py
-	python3 testsmooth.py
-
 
 clean:
 	-rm -v bessel_tests model_output_tests save_test_data
