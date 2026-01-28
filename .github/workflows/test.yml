@@ -60,7 +60,7 @@ jobs:
       - name: Install make (MSYS2 shell)
         shell: msys2 {0}
         run: |
-            pacman -Sy make   
+            pacman -Syy make   
 
       - name: Build (Ninja in MSYS2 shell)
         shell: msys2 {0}

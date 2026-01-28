@@ -15,10 +15,12 @@ endif
 OS=$(shell uname -s)
 ifeq ($(OS),Linux)
 	LIBFILE=libcon2020.so
-elifeq ($(OS),Darwin)
-	LIBFILE=libcon2020.dylib
 else
-	LIBFILE=libcon2020.dll
+	ifeq ($(OS),Darwin)
+		LIBFILE=libcon2020.dylib
+	else
+		LIBFILE=libcon2020.dll
+	endif
 endif
 
 all: obj lib
