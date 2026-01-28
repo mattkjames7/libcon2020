@@ -61,8 +61,12 @@ lmic:
 	$(CCo) lmic.cc -o $(BUILDDIR)/lmic.o
 
 lib:
+ifeq ($(OS),Darwin)
+	$(CC) $(BUILDDIR)/*.o -dynamiclib -o ../lib/$(LIBFILE) $(LDFLAGS)
+	install_name_tool -id @loader_path/../lib/$(LIBFILE) ../lib/$(LIBFILE)
+else
 	$(CC) $(BUILDDIR)/*.o -shared -o ../lib/$(LIBFILE) $(LDFLAGS)
-	if [ "$(OS)" = "Darwin" ]; then install_name_tool -id @loader_path/../lib/$(LIBFILE) ../lib/$(LIBFILE); fi
+endif
 	
 winobj:
 	$(CCWo) con2020.cc -o $(BUILDDIR)/con2020.o 
