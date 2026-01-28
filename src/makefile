@@ -60,7 +60,7 @@ flux:
 lmic:
 	$(CCo) lmic.cc -o $(BUILDDIR)/lmic.o
 
-lib:
+lib: obj
 ifeq ($(OS),Darwin)
 	$(CC) $(BUILDDIR)/con2020.o ${BUILDDIR}/bessel.o ${BUILDDIR}/polyeval.o ${BUILDDIR}/trap.o ${BUILDDIR}/smoothd.o ${BUILDDIR}/libcon2020.o ${BUILDDIR}/scalarpot.o ${BUILDDIR}/flux.o ${BUILDDIR}/lmic.o -dynamiclib -o ../lib/$(LIBFILE) $(LDFLAGS)
 	install_name_tool -id @loader_path/../lib/$(LIBFILE) ../lib/$(LIBFILE)
