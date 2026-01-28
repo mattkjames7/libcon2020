@@ -15,11 +15,13 @@ endif
 OS=$(shell uname -s)
 ifeq ($(OS),Linux)
 	LIBFILE=libcon2020.so
-else
+elifeq ($(OS),Darwin)
 	LIBFILE=libcon2020.dylib
+else
+	LIBFILE=libcon2020.dll
 endif
 
-all: header obj lib 
+all: obj lib
 
 header:
 	$(CC) trimstring.cc generateheader.cc -o generateheader
