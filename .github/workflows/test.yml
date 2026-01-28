@@ -105,6 +105,7 @@ jobs:
 
       - name: Debug prints
         run: |
+          ls build/
           uname -m
           ls -l test/../lib
           file test/../lib/libcon2020.*
