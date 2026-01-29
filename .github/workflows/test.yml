@@ -54,11 +54,6 @@ jobs:
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-ninja
 
-      - name: Install make (MSYS2 shell)
-        shell: msys2 {0}
-        run: |
-            pacman -S --noconfirm make   
-
       - name: Build (Ninja in MSYS2 shell)
         shell: msys2 {0}
         run: |
