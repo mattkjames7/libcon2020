@@ -1,0 +1,121 @@
+name: "Build and Test"
+
+on: 
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *'  # Runs at midnight UTC on the 1st of every month
+
+run-name: "Build and Test Library"
+
+jobs:
+  build_linux:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          ref: ${{ github.ref }}
+      
+      - name: Install build requirements
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build g++
+
+      - name: Build Library
+        run: |
+          cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install"
+          cmake --build build -j$(nproc)
+
+      - name: Run Tests
+        run: |
+          ctest --output-on-failure --test-dir build -j$(nproc)
+        
+      - name: Install Library
+        run: cmake --install build
+
+      - name: Build and Run Examples
+        run: |
+          gcc examples/cexample.c -I"$PWD/install/include" -L"$PWD/install/lib" -lcon2020 -o build/cexample
+          g++ examples/cppexample.cc -I"$PWD/install/include" -L"$PWD/install/lib" -lcon2020 -o build/cppexample
+          LD_LIBRARY_PATH="$PWD/install/lib:$LD_LIBRARY_PATH" ./build/cexample
+          LD_LIBRARY_PATH="$PWD/install/lib:$LD_LIBRARY_PATH" ./build/cppexample
+
+
+  build_windows:
+    runs-on: "windows-latest"
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          ref: ${{ github.ref }}
+      
+      - name: Set up MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >
+            git
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+
+      - name: Build (Ninja in MSYS2 shell)
+        shell: msys2 {0}
+        run: |
+          cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="C:/spline/install"
+          cmake --build build -j$(nproc)
+
+      - name: Run Tests (MSYS2 shell)
+        shell: msys2 {0}
+        run: |
+          export PATH="$PWD/build/lib:$PWD/build/bin:$PATH"
+          ctest --output-on-failure --test-dir build -j$(nproc)
+          
+      - name: Install (MSYS2 shell)
+        shell: msys2 {0}
+        run: cmake --install build
+
+      - name: Build and Run Examples (MSYS2 shell)
+        shell: msys2 {0}
+        run: |
+          gcc examples/cexample.c -I/c/spline/install/include -L/c/spline/install/lib -lcon2020 -o build/cexample.exe
+          g++ examples/cppexample.cc -I/c/spline/install/include -L/c/spline/install/lib -lcon2020 -o build/cppexample.exe
+          export PATH="/c/spline/install/bin:$PATH"
+          ./build/cexample.exe
+          ./build/cppexample.exe
+
+
+  build_macos:
+    runs-on: "macos-latest"
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          ref: ${{ github.ref }}
+      
+      - name: Install Dependencies
+        run: |
+          brew update
+          brew install cmake ninja
+
+      - name: Build
+        run: |
+          cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install"
+          cmake --build build -j$(sysctl -n hw.ncpu)
+
+      - name: Run Tests
+        run: |
+          ctest --output-on-failure --test-dir build -j$(nproc)
+        
+      - name: Install
+        run: cmake --install build
+
+      - name: Build and Run Examples
+        run: |
+          cc examples/cexample.c -I"$PWD/install/include" -L"$PWD/install/lib" -lcon2020 -o build/cexample
+          c++ examples/cppexample.cc -I"$PWD/install/include" -L"$PWD/install/lib" -lcon2020 -o build/cppexample
+          DYLD_LIBRARY_PATH="$PWD/install/lib:$DYLD_LIBRARY_PATH" ./build/cexample
+          DYLD_LIBRARY_PATH="$PWD/install/lib:$DYLD_LIBRARY_PATH" ./build/cppexample
+
