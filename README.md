@@ -8,32 +8,28 @@ This is part of [libjupitermag](https://github.com/mattkjames7/libjupitermag.git
 
 ## Building libcon2020
 
-To build this library in Linux or Mac OS:
+To build this library in Linux, Windows or macOS:
 
 ```bash
 #clone this repo
 git clone https://github.com/mattkjames7/libcon2020.git
 cd libcon2020
 
-#build
-make 
+#configure
+cmake -B build -GNinja
 
-#optionally install it system wide
-sudo make install
+# OR with tests
+cmake -B build -DENABLE_TESTS=ON -GNinja
+
+# build
+cmake --build build -j$(nproc)
+
+# optionally install it system wide
+sudo cmake install build
+
+# optionally run tests
+ctest --test-dir build/test --output-on-failure -j$(nproc)
 ```
-
-In Windows:
-
-```powershell
-git clone https://github.com/mattkjames7/libcon2020.git
-cd libcon2020
-
-.\compile.bat
-```
-
-With a system wide installation, the compiler and linker will be able to locate the library and its header, otherwise absolute paths must be provided for linking and including. In Windows there is an experimental script ```install.bat``` which will copy the DLL and headers to folders within the `C:\TDM-GCC-64\` directory. This is experimental, instead it might be better to copy the headers and the DLL to the root directory of the executable linked to it.
-
-Uninstallation can be acheived in Linux and Mac using ```sudo make uninstall```.
 
 ## Usage
 
