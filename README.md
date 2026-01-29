@@ -15,11 +15,20 @@ To build this library in Linux or Mac OS:
 git clone https://github.com/mattkjames7/libcon2020.git
 cd libcon2020
 
-#build
-make 
+#configure
+cmake -B build -GNinja
 
-#optionally install it system wide
-sudo make install
+# OR with tests
+cmake -B build -DENABLE_TESTS=ON -GNinja
+
+# build
+cmake --build build -j$(nproc)
+
+# optionally install it system wide
+sudo cmake install build
+
+# optionally run tests
+ctest --test-dir build/test --output-on-failure -j$(nproc)
 ```
 
 In Windows:
