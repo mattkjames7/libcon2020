@@ -34,6 +34,13 @@ jobs:
       - name: Install Library
         run: cmake --install build
 
+      - name: Build and Run Examples
+        run: |
+          gcc examples/cexample.c -I"$PWD/install/include" -L"$PWD/install/lib" -lcon2020 -o build/cexample
+          g++ examples/cppexample.cc -I"$PWD/install/include" -L"$PWD/install/lib" -lcon2020 -o build/cppexample
+          LD_LIBRARY_PATH="$PWD/install/lib:$LD_LIBRARY_PATH" ./build/cexample
+          LD_LIBRARY_PATH="$PWD/install/lib:$LD_LIBRARY_PATH" ./build/cppexample
+
 
   build_windows:
     runs-on: "windows-latest"
@@ -70,6 +77,15 @@ jobs:
         shell: msys2 {0}
         run: cmake --install build
 
+      - name: Build and Run Examples (MSYS2 shell)
+        shell: msys2 {0}
+        run: |
+          gcc examples/cexample.c -I/c/spline/install/include -L/c/spline/install/lib -lcon2020 -o build/cexample.exe
+          g++ examples/cppexample.cc -I/c/spline/install/include -L/c/spline/install/lib -lcon2020 -o build/cppexample.exe
+          export PATH="/c/spline/install/bin:$PATH"
+          ./build/cexample.exe
+          ./build/cppexample.exe
+
 
   build_macos:
     runs-on: "macos-latest"
@@ -95,4 +111,11 @@ jobs:
         
       - name: Install
         run: cmake --install build
+
+      - name: Build and Run Examples
+        run: |
+          cc examples/cexample.c -I"$PWD/install/include" -L"$PWD/install/lib" -lcon2020 -o build/cexample
+          c++ examples/cppexample.cc -I"$PWD/install/include" -L"$PWD/install/lib" -lcon2020 -o build/cppexample
+          DYLD_LIBRARY_PATH="$PWD/install/lib:$DYLD_LIBRARY_PATH" ./build/cexample
+          DYLD_LIBRARY_PATH="$PWD/install/lib:$DYLD_LIBRARY_PATH" ./build/cppexample
 
