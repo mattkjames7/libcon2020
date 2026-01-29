@@ -29,7 +29,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          ctest --output-on-failure --test-dir build
+          ctest --output-on-failure --test-dir build -j$(nproc)
         
       - name: Install Library
         run: cmake --install build
@@ -64,7 +64,7 @@ jobs:
         shell: msys2 {0}
         run: |
           export PATH="$PWD/build/lib:$PWD/build/bin:$PATH"
-          ctest --output-on-failure --test-dir build
+          ctest --output-on-failure --test-dir build -j$(nproc)
           
       - name: Install (MSYS2 shell)
         shell: msys2 {0}
@@ -91,7 +91,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          ctest --output-on-failure --test-dir build
+          ctest --output-on-failure --test-dir build -j$(nproc)
         
       - name: Install
         run: cmake --install build
