@@ -27,3 +27,8 @@ install(TARGETS libcon2020
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin
 )
+
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/include/"
+    DESTINATION include
+    FILES_MATCHING PATTERN "*.h"
+)
