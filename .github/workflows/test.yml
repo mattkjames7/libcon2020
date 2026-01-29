@@ -24,17 +24,15 @@ jobs:
 
       - name: Build Library
         run: |
-          # cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install"
-          # cmake --build build -j$(nproc)
-          make -j$(nproc)
+          cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install"
+          cmake --build build -j$(nproc)
 
       - name: Run Tests
         run: |
-          #ctest --output-on-failure --test-dir build
-          make test
-
-      # - name: Install Library
-      #   run: cmake --install build
+          ctest --output-on-failure --test-dir build
+        
+      - name: Install Library
+        run: cmake --install build
 
 
   build_windows:
@@ -64,21 +62,18 @@ jobs:
       - name: Build (Ninja in MSYS2 shell)
         shell: msys2 {0}
         run: |
-          # cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="C:/spline/install"
-          # cmake --build build -j
-          make -j$(nproc)
+          cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="C:/spline/install"
+          cmake --build build -j$(nproc)
 
       - name: Run Tests (MSYS2 shell)
         shell: msys2 {0}
         run: |
-          # export PATH="$PWD/build/lib:$PWD/build/bin:$PATH"
-          # ctest --output-on-failure --test-dir build
-          export PATH="$PWD/lib:$PATH"
-          make test
-
-      # - name: Install (MSYS2 shell)
-      #   shell: msys2 {0}
-      #   run: cmake --install build
+          export PATH="$PWD/build/lib:$PWD/build/bin:$PATH"
+          ctest --output-on-failure --test-dir build
+          
+      - name: Install (MSYS2 shell)
+        shell: msys2 {0}
+        run: cmake --install build
 
 
   build_macos:
@@ -96,15 +91,13 @@ jobs:
 
       - name: Build
         run: |
-          # cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install"
-          # cmake --build build -j
-          make -j$(sysctl -n hw.ncpu)
+          cmake -S . -B build -G Ninja -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install"
+          cmake --build build -j$(sysctl -n hw.ncpu)
 
       - name: Run Tests
         run: |
-          #ctest --output-on-failure --test-dir build
-          make test
-
-      # - name: Install
-      #   run: cmake --install build
+          ctest --output-on-failure --test-dir build
+        
+      - name: Install
+        run: cmake --install build
 
