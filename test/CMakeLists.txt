@@ -83,13 +83,6 @@ if(_test_rpath)
   )
 endif()
 
-add_test(NAME model_output_tests COMMAND model_output_tests)
-add_test(NAME bessel_tests COMMAND bessel_tests)
-
-set_tests_properties(model_output_tests bessel_tests PROPERTIES
-  WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-)
-
 # On Windows the test executable won't find DLLs located in other directories
 # (RPATH doesn't apply). If we built shared libs, copy the spline DLL
 # next to the test executable so it can be loaded at runtime in CI.
@@ -125,10 +118,10 @@ if(BUILD_SHARED_LIBS AND WIN32)
     
     # On Windows with shared libs, skip automatic test discovery since DLLs
     # aren't available during CMake configuration. Register the test manually instead.
-    add_test(NAME model_output_tests COMMAND model_output_tests WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-    add_test(NAME bessel_tests COMMAND bessel_tests WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+    add_test(NAME model_output_tests COMMAND model_output_tests WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+    add_test(NAME bessel_tests COMMAND bessel_tests WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 else()
     include(GoogleTest)
-    gtest_discover_tests(model_output_tests)
-    gtest_discover_tests(bessel_tests)
+    gtest_discover_tests(model_output_tests WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+    gtest_discover_tests(bessel_tests WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 endif()
