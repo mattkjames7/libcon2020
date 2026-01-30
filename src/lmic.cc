@@ -1,6 +1,6 @@
 #include "lmic.h"
 
-
+namespace con2020 {
 /*************************************************************
 *
 *	NAME: f_theta(thetai)
@@ -310,3 +310,5 @@ double BphiIonosphere( 	double thetai, double g,
 	return Bphi*1e9;
 
 }
+
+} // end namespace con2020

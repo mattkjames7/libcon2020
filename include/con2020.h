@@ -23,8 +23,7 @@
 
 
 #ifdef __cplusplus
-extern "C" {
-#endif
+namespace con2020 {
 	/* these wrappers can be used to get the magnetic field vectors */
 	void Con2020FieldArray(int n, double *p0, double *p1, double *p2,
 					double *B0, double *B1, double *B2);
@@ -327,10 +326,8 @@ extern "C" {
 							double wO_open, double wO_om,
 							double thetamm, double dthetamm,
 							double thetaoc, double dthetaoc );
-#ifdef __cplusplus
-}
 
-namespace con2020 {
+
 /***********************************************************************
  * NAME : j0(x)
  * 
@@ -659,11 +656,10 @@ class Con2020 {
 
 } //namespace con2020;
 /* we want to initialize the model objects with its parameters */
-extern Con2020 con2020;
+extern con2020::Con2020 con2020inst;
 
-extern "C" {
-}
 
+namespace con2020 {
 double polyeval(double x, double *c, int d);
 
 double pol1eval(double x, double *c, int d);
@@ -753,11 +749,7 @@ template <typename T> T sgn(T x) {
 	return (x > 0) - (x < 0);
 }
 
-extern "C" {
-}
 
-
-extern "C" {
 }
 #endif
 #endif
