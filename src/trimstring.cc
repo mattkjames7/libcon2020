@@ -1,6 +1,6 @@
 #include "trimstring.h"
 
-
+namespace con2020 {
 
 
 // Function to trim whitespace from the start of a string
@@ -25,3 +25,5 @@ std::string rightTrim(const std::string& str) {
 std::string trimString(const std::string& str) {
     return leftTrim(rightTrim(str));
 }
+
+} // end namespace con2020

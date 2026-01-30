@@ -5,8 +5,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-extern "C" {
-
+namespace con2020 {
 /***************************************************************
 *
 *   NAME : ScalarPotentialSmallRho(rho,z,a,mui2,D)
@@ -79,6 +78,6 @@ extern "C" {
 							double mui2, double D, 
 							double deltarho, double deltaz);
 
-}
+} // end namespace con2020
 
 #endif

@@ -1,4 +1,6 @@
 #include "smoothd.h"
+
+namespace con2020 {
 /***********************************************************************
  * NAME : smoothd(z,dz,d)
  * 
@@ -24,3 +26,5 @@ double smoothd(double z, double dz, double d) {
 	return 0.5*(d*(tanhzd0 + tanhzd1) + z*(tanhzd0 - tanhzd1));
 
 }
+
+} // end namespace con2020

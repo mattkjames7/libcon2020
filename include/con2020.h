@@ -330,7 +330,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 
-
+namespace con2020 {
 /***********************************************************************
  * NAME : j0(x)
  * 
@@ -657,7 +657,7 @@ class Con2020 {
 };
 
 
-
+} //namespace con2020;
 /* we want to initialize the model objects with its parameters */
 extern Con2020 con2020;
 

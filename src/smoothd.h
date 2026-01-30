@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-
+namespace con2020 {
 /***********************************************************************
  * NAME : smoothd(z,dz,d)
  * 
@@ -22,4 +22,5 @@
  * ********************************************************************/
 double smoothd(double z, double dz, double d);
 
+} // end namespace con2020
 #endif

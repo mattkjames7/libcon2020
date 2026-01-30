@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "scalarpot.h"
 
-extern "C" {
+namespace con2020 {
 
 /***************************************************************
 *
@@ -49,5 +49,5 @@ extern "C" {
 ***************************************************************/
 	double FluxDip(double r, double theta, double g);
 
-}
+} // end namespace con2020
 #endif

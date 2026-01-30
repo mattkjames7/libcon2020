@@ -4,7 +4,9 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+namespace con2020 {
 double polyeval(double x, double *c, int d);
 
 double pol1eval(double x, double *c, int d);
+} // end namespace con2020
 #endif

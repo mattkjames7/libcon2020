@@ -1,5 +1,6 @@
 #include "polyeval.h"
 
+namespace con2020 {
 
 double polyeval(double x, double *c, int d) {
 	double y = c[0];
@@ -18,3 +19,5 @@ double pol1eval(double x, double *c, int d) {
 	}
 	return y;
 }
+
+} // end namespace con2020

@@ -1,5 +1,7 @@
 #include "flux.h"
 
+namespace con2020 {
+
 /***************************************************************
 *
 *   NAME : FluxCan(rho,z,r0,r1,mui2,D,deltarho,deltaz)
@@ -55,3 +57,5 @@ double FluxDip(double r, double theta, double g) {
 	double F = (g*sint*sint)/r;
 	return F;
 }
+
+} // end namespace con2020

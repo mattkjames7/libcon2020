@@ -1,5 +1,8 @@
 #include "trap.h"
 
+
+
+namespace con2020 {
 double trap(int n, double *x, double *y) {
 	
 	double a = 0.0;
@@ -33,3 +36,5 @@ double trapc(int n, double dx, double *y) {
 	return a*dx;
 	
 }
+
+} // end namespace con2020

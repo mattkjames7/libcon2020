@@ -1,5 +1,7 @@
 #include "con2020.h"
 
+namespace con2020 {
+
 Con2020::Con2020() {
 	/* set all model parameters to their default values */
 	mui_ = 139.6;
@@ -1387,3 +1389,5 @@ void Con2020::SetAzimuthalFunc(const char* azfunc) {
 void Con2020::GetAzimuthalFunc(char* azfunc) {
 	strcpy(azfunc,azfunc_);
 }
+
+} // namespace conn2020
