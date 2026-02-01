@@ -431,20 +431,20 @@ void j0(int n, double *x, double multx, double *j);
 void j1(int n, double *x, double multx, double *j);
 
 
-
+/* Bessel function approximations from 
+ * 
+ * https://doi.org/10.1007/s40314-020-01238-z
+ * 
+ * and 
+ * 
+ * https://doi.org/10.1007/s40314-020-01238-z
+ */
 void j0m(int n, double *x, double *j);
 void j1m(int n, double *x, double *j);
 
 void j0m(int n, double *x, double multx, double *j);
 void j1m(int n, double *x, double multx, double *j);
 
-
-
-
-
-template <typename T> T clip(T x, T mn, T mx) {
-	return std::min(mx,std::max(x,mn));
-}
 
 
 /* function pointer for input conversion */
@@ -660,32 +660,7 @@ extern con2020::Con2020 con2020inst;
 
 
 namespace con2020 {
-double polyeval(double x, double *c, int d);
 
-double pol1eval(double x, double *c, int d);
-
-
-/***********************************************************************
- * NAME : smoothd(z,dz,d)
- * 
- * DESCRIPTION : Smooth fucntion for crossing the current sheet 
- * (replaces the last bit of equation 12 in Edwards et al 2000).
- * 
- * INPUTS : 
- * 		double z	z-coordinate in dipole coordinate system (Rj)
- * 		double dz	Scale of the transition to use (Rj)
- * 		double d	Half thickness of the current sheet.
- * 
- * RETURNS : 
- * 		double out	Smoothed function across the current sheet.
- * 
- * ********************************************************************/
-double smoothd(double z, double dz, double d);
-
-
-
-double trap(int n, double *x, double *y);
-double trapc(int n, double dx, double *y);
 
 /***************************************************************
 *
@@ -743,11 +718,6 @@ double FluxDip(double r, double theta, double g) {
 	return F;
 }
 
-
-
-template <typename T> T sgn(T x) {
-	return (x > 0) - (x < 0);
-}
 
 
 }
