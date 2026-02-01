@@ -22,6 +22,17 @@
 #define rad2deg 180.0/M_PI
 
 
+/* C-linkage wrapper for array field evaluation */
+#ifdef __cplusplus
+extern "C" {
+#endif
+void Con2020FieldArray(int n, double *p0, double *p1, double *p2,
+					double *B0, double *B1, double *B2);
+#ifdef __cplusplus
+}
+#endif
+
+
 #ifdef __cplusplus
 namespace con2020 {
 	/* these wrappers can be used to get the magnetic field vectors */
