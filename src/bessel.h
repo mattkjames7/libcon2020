@@ -7,7 +7,7 @@
 
 
 namespace con2020 {
-
+namespace bessel {
 /***********************************************************************
  * NAME : j0(x)
  * 
@@ -118,7 +118,7 @@ void j1m(int n, double *x, double *j);
 void j0m(int n, double *x, double multx, double *j);
 void j1m(int n, double *x, double multx, double *j);
 
-
+} // end namespace bessel
 }   // end namespace con2020
 
 #endif

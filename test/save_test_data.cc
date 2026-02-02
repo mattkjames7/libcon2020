@@ -99,10 +99,10 @@ nlohmann::json collect_bessel_data() {
     std::array<double, N> j1_vals0;
     std::array<double, N> j1_vals1;
 
-    con2020::j0(N, x_vals0.data(), j0_vals0.data());
-    con2020::j0(N, x_vals1.data(), j0_vals1.data());
-    con2020::j1(N, x_vals0.data(), j1_vals0.data());
-    con2020::j1(N, x_vals1.data(), j1_vals1.data());
+    con2020::bessel::j0(N, x_vals0.data(), j0_vals0.data());
+    con2020::bessel::j0(N, x_vals1.data(), j0_vals1.data());
+    con2020::bessel::j1(N, x_vals0.data(), j1_vals0.data());
+    con2020::bessel::j1(N, x_vals1.data(), j1_vals1.data());
 
     // Collect data into JSON
     nlohmann::json bessel_data;

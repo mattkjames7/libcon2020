@@ -11,6 +11,7 @@
 #endif
 
 namespace con2020 {
+	namespace lmic {
 	/*************************************************************
 	*
 	*	NAME: f_theta(thetai)
@@ -209,5 +210,6 @@ namespace con2020 {
 							double wO_open, double wO_om,
 							double thetamm, double dthetamm,
 							double thetaoc, double dthetaoc );
+	} // namespace lmic
 }
 #endif

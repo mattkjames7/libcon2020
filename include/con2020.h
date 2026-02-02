@@ -378,7 +378,7 @@ namespace con2020 {
 							double thetamm, double dthetamm,
 							double thetaoc, double dthetaoc );
 
-
+namespace bessel {
 /***********************************************************************
  * NAME : j0(x)
  * 
@@ -495,7 +495,7 @@ void j1m(int n, double *x, double *j);
 
 void j0m(int n, double *x, double multx, double *j);
 void j1m(int n, double *x, double multx, double *j);
-
+} // namespace bessel
 
 
 /* function pointer for input conversion */

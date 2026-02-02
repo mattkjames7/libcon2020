@@ -1,7 +1,7 @@
 #include "bessel.h"
 
 namespace con2020 {
-
+namespace bessel {
 
 /* J0 polynomials as defined in the Cephes library */
 static double PP0[7] = {
@@ -459,5 +459,5 @@ void j1m(int n, double *x, double multx, double *j) {
 
 }
 
-
+} // end namespace bessel
 } // end namespace con2020	

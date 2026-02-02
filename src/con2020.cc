@@ -357,7 +357,7 @@ void Con2020::_BphiLMIC(double rho, double absz, double z, double *Bphi) {
 		theta = 0.0;
 	}
 
-	Bphi[0] = BphiLMIC(r,theta,g_,r0_,r1_,mui_,d_,deltarho_,deltaz_,
+	Bphi[0] = lmic::BphiLMIC(r,theta,g_,r0_,r1_,mui_,d_,deltarho_,deltaz_,
 				wO_open_,wO_om_,thetamm_,dthetamm_,thetaoc_,dthetaoc_);
 
 }
@@ -818,8 +818,8 @@ void Con2020::_RecalcIntegrals(){
 		}
 	
 		/* calculate j0(r0*lambda) */
-		j0(rnbes_[zcase],&rlambda_[zcase][0],r0_,&rj0_lambda_r0_[zcase][0]);
-		j0(znbes_[zcase],&zlambda_[zcase][0],r0_,&zj0_lambda_r0_[zcase][0]);
+		bessel::j0(rnbes_[zcase],&rlambda_[zcase][0],r0_,&rj0_lambda_r0_[zcase][0]);
+		bessel::j0(znbes_[zcase],&zlambda_[zcase][0],r0_,&zj0_lambda_r0_[zcase][0]);
 		
 		/* equations */
 		for (i=0;i<rnbes_[zcase];i++) {
@@ -998,7 +998,7 @@ void Con2020::_IntegrateEq14(int zcase, double rho, double z, double absz, doubl
 	double *j1lr = new double[n];
 	
 	/* calculate the other bessel function */
-	j1(n,&rlambda_[zcase][0],rho,j1lr);
+	bessel::j1(n,&rlambda_[zcase][0],rho,j1lr);
 	
 	
 	/* calculate the function */
@@ -1024,7 +1024,7 @@ void Con2020::_IntegrateEq15(int zcase, double rho, double absz, double *Bz) {
 	double *j0lr = new double[n];
 	
 	/* calculate the other bessel function */
-	j0(n,&zlambda_[zcase][0],rho,j0lr);
+	bessel::j0(n,&zlambda_[zcase][0],rho,j0lr);
 	
 	
 	/* calculate the function */
@@ -1051,7 +1051,7 @@ void Con2020::_IntegrateEq17(int zcase, double rho, double z, double *Brho) {
 	double *j1lr = new double[n];
 	
 	/* calculate the other bessel function */
-	j1(n,&rlambda_[zcase][0],rho,j1lr);
+	bessel::j1(n,&rlambda_[zcase][0],rho,j1lr);
 	
 	
 	/* calculate the function */
@@ -1077,7 +1077,7 @@ void Con2020::_IntegrateEq18(int zcase, double rho, double z, double *Bz) {
 	double *j0lr = new double[n];
 	
 	/* calculate the other bessel function */
-	j0(n,&zlambda_[zcase][0],rho,j0lr);
+	bessel::j0(n,&zlambda_[zcase][0],rho,j0lr);
 	
 	
 	/* calculate the function */
