@@ -2,25 +2,12 @@
 #ifndef __LIBCON2020_H__
 #define __LIBCON2020_H__
 
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#ifdef __cplusplus
-	#include <algorithm>
-	#include <string>
-#else
-	#include <string.h>
+#ifndef __cplusplus
 	#include <stdbool.h>
 #endif
 #define LIBCON2020_VERSION_MAJOR 1
 #define LIBCON2020_VERSION_MINOR 1
 #define LIBCON2020_VERSION_PATCH 0
-
-#define deg2rad M_PI/180.0
-#define rad2deg 180.0/M_PI
-
 
 /* C-linkage wrapper for array field evaluation */
 #ifdef __cplusplus
