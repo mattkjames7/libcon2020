@@ -15,6 +15,8 @@
 #define rad2deg 180.0/M_PI
 
 
+namespace con2020 {
+
 /* function pointer for input conversion */
 class Con2020; /*this is needed for the pointer below */ 
 typedef void (Con2020::*InputConvFunc)(int,double*,double*,double*,
@@ -220,4 +222,6 @@ class Con2020 {
 		/* hybrid */
 		void _Hybrid(double,double,double,double*,double*,double*);
 };
+
+} // end namespace con2020
 #endif

@@ -1,5 +1,7 @@
 #include "scalarpot.h"
 
+
+namespace con2020 {
 /***************************************************************
 *
 *   NAME : ScalarPotentialSmallRho(rho,z,a,mui2,D)
@@ -127,3 +129,5 @@ double ScalarPotential( double rho, double z, double a,
 
     return A;
 }
+
+} // end namespace con2020

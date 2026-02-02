@@ -22,10 +22,12 @@ Vec3D get_model_vectors(
     std::vector<double> B1(N); 
     std::vector<double> B2(N);
 
-    con2020.SetEqType(eqtype.c_str());
-    con2020.SetCartIn(is_cartesian);
-    con2020.SetCartOut(is_cartesian);
-    con2020.Field(
+    con2020::Con2020 model;
+
+    model.SetEqType(eqtype.c_str());
+    model.SetCartIn(is_cartesian);
+    model.SetCartOut(is_cartesian);
+    model.Field(
         N,
         pos0.data(), pos1.data(), pos2.data(),
         B0.data(), B1.data(), B2.data()

@@ -25,7 +25,7 @@ std::array<T, N> random_array(T min, T max) {
 nlohmann::json collect_model_data(std::string eqtype) {
     const std::size_t N = 100;
 
-    Con2020 model;
+    con2020::Con2020 model;
 
     // Generate random test data (cartesian)
     auto x_vals = random_array<N>(-60.0, 60.0);
@@ -99,10 +99,10 @@ nlohmann::json collect_bessel_data() {
     std::array<double, N> j1_vals0;
     std::array<double, N> j1_vals1;
 
-    j0(N, x_vals0.data(), j0_vals0.data());
-    j0(N, x_vals1.data(), j0_vals1.data());
-    j1(N, x_vals0.data(), j1_vals0.data());
-    j1(N, x_vals1.data(), j1_vals1.data());
+    con2020::bessel::j0(N, x_vals0.data(), j0_vals0.data());
+    con2020::bessel::j0(N, x_vals1.data(), j0_vals1.data());
+    con2020::bessel::j1(N, x_vals0.data(), j1_vals0.data());
+    con2020::bessel::j1(N, x_vals1.data(), j1_vals1.data());
 
     // Collect data into JSON
     nlohmann::json bessel_data;

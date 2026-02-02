@@ -1,6 +1,7 @@
 #include "lmic.h"
 
-
+namespace con2020 {
+namespace lmic {
 /*************************************************************
 *
 *	NAME: f_theta(thetai)
@@ -310,3 +311,54 @@ double BphiIonosphere( 	double thetai, double g,
 	return Bphi*1e9;
 
 }
+
+} // namespace lmic
+} // end namespace con2020
+
+extern "C" {
+
+double OmegaRatio(	double thetai, double wO_open, double wO_om,
+					double thetamm, double dthetamm,
+					double thetaoc, double dthetaoc) {
+	return con2020::lmic::OmegaRatio(thetai, wO_open, wO_om,
+					thetamm, dthetamm,
+					thetaoc, dthetaoc);
+}
+
+double PedersenCurrent(	double thetai, double g, 
+					double wO_open, double wO_om,
+					double thetamm, double dthetamm,
+					double thetaoc, double dthetaoc ) {
+	return con2020::lmic::PedersenCurrent(thetai, g, 
+					wO_open, wO_om,
+					thetamm, dthetamm,
+					thetaoc, dthetaoc );
+}
+
+double BphiLMIC(double r, double theta, double g,
+						double r0, double r1,
+						double mui2, double D, 
+						double deltarho, double deltaz,
+						double wO_open, double wO_om,
+						double thetamm, double dthetamm,
+						double thetaoc, double dthetaoc ) {
+	return con2020::lmic::BphiLMIC(r, theta, g,
+						r0, r1,
+						mui2, D, 
+						deltarho, deltaz,
+						wO_open, wO_om,
+						thetamm, dthetamm,
+						thetaoc, dthetaoc );
+}
+
+double BphiIonosphere( 	double thetai, double g,
+						double wO_open, double wO_om,
+						double thetamm, double dthetamm,
+						double thetaoc, double dthetaoc ) {
+	return con2020::lmic::BphiIonosphere(	thetai, g,
+						wO_open, wO_om,
+						thetamm, dthetamm,
+						thetaoc, dthetaoc );
+}
+
+} // extern "C"

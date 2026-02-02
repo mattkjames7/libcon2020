@@ -6,11 +6,11 @@
 #include <string.h>
 
 
+// /* we want to initialize the model objects with its parameters */
+// extern con2020::Con2020 con2020;
+extern con2020::Con2020 con2020inst; /* default model object */
 
-/* we want to initialize the model objects with its parameters */
-extern Con2020 con2020;
-
-extern "C" {
+namespace con2020 {
 	/* these wrappers can be used to get the magnetic field vectors */
 	void Con2020FieldArray(int n, double *p0, double *p1, double *p2,
 					double *B0, double *B1, double *B2);
@@ -43,4 +43,5 @@ extern "C" {
 							double *Brho, double *Bz);
 
 }
+
 #endif

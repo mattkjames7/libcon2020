@@ -10,7 +10,8 @@
 #define M_PI		3.14159265358979323846
 #endif
 
-extern "C" {
+namespace con2020 {
+	namespace lmic {
 	/*************************************************************
 	*
 	*	NAME: f_theta(thetai)
@@ -209,5 +210,6 @@ extern "C" {
 							double wO_open, double wO_om,
 							double thetamm, double dthetamm,
 							double thetaoc, double dthetaoc );
+	} // namespace lmic
 }
 #endif

@@ -6,6 +6,7 @@
 #include <math.h>
 #endif
 
-
+namespace con2020 {
 double trap(int n, double *x, double *y);
 double trapc(int n, double dx, double *y);
+}

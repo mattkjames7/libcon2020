@@ -2,29 +2,79 @@
 #ifndef __LIBCON2020_H__
 #define __LIBCON2020_H__
 
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#ifdef __cplusplus
-	#include <algorithm>
-	#include <string>
-#else
-	#include <string.h>
+#ifndef __cplusplus
 	#include <stdbool.h>
 #endif
 #define LIBCON2020_VERSION_MAJOR 1
 #define LIBCON2020_VERSION_MINOR 1
 #define LIBCON2020_VERSION_PATCH 0
 
-#define deg2rad M_PI/180.0
-#define rad2deg 180.0/M_PI
-
-
+/* C-linkage wrapper for array field evaluation */
 #ifdef __cplusplus
 extern "C" {
 #endif
+void Con2020FieldArray(int n, double *p0, double *p1, double *p2,
+					double *B0, double *B1, double *B2);
+
+void Con2020Field(double p0, double p1, double p2,
+			double *B0, double *B1, double *B2);
+
+void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
+					double *d, double *xt, double *xp, char *eqtype,
+					bool *Edwards, bool *ErrChk, bool *CartIn, bool *CartOut, 
+					bool  *smooth, double *DeltaRho, double *DeltaZ,
+					double *g, char *azfunc, double *wO_open, double *wO_om,
+					double *thetamm, double *dthetamm, double *thetaoc, double *dthetaoc);
+
+void SetCon2020Params(double mui, double irho, double r0, double r1,
+					double d, double xt, double xp, const char *eqtype,
+					bool Edwards, bool ErrChk, bool CartIn, bool CartOut, 
+					bool smooth, double DeltaRho, double DeltaZ,
+					double g, const char *azfunc, double wO_open, double wO_om,
+					double thetamm, double dthetamm, double thetaoc, double dthetaoc);
+
+void Con2020AnalyticField(	int n, double a, 
+							double *rho, double *z, 
+							double *Brho, double *Bz);
+
+void Con2020AnalyticFieldSmooth(	int n, double a, 
+							double *rho, double *z, 
+							double *Brho, double *Bz);
+double OmegaRatio(	double thetai, double wO_open, double wO_om,
+					double thetamm, double dthetamm,
+					double thetaoc, double dthetaoc);
+
+double PedersenCurrent(	double thetai, double g, 
+					double wO_open, double wO_om,
+					double thetamm, double dthetamm,
+					double thetaoc, double dthetaoc );
+
+double BphiLMIC(double r, double theta, double g,
+						double r0, double r1,
+						double mui2, double D, 
+						double deltarho, double deltaz,
+						double wO_open, double wO_om,
+						double thetamm, double dthetamm,
+						double thetaoc, double dthetaoc );
+
+double BphiIonosphere( 	double thetai, double g,
+						double wO_open, double wO_om,
+						double thetamm, double dthetamm,
+						double thetaoc, double dthetaoc );
+
+double FluxCan(	double rho,double z, double r0, double r1,
+				double mui2, double D, 
+				double deltarho, double deltaz);
+
+double FluxDip(double r, double theta, double g);
+
+#ifdef __cplusplus
+}
+#endif
+
+
+#ifdef __cplusplus
+namespace con2020 {
 	/* these wrappers can be used to get the magnetic field vectors */
 	void Con2020FieldArray(int n, double *p0, double *p1, double *p2,
 					double *B0, double *B1, double *B2);
@@ -327,10 +377,8 @@ extern "C" {
 							double wO_open, double wO_om,
 							double thetamm, double dthetamm,
 							double thetaoc, double dthetaoc );
-#ifdef __cplusplus
-}
 
-
+namespace bessel {
 /***********************************************************************
  * NAME : j0(x)
  * 
@@ -434,20 +482,20 @@ void j0(int n, double *x, double multx, double *j);
 void j1(int n, double *x, double multx, double *j);
 
 
-
+/* Bessel function approximations from 
+ * 
+ * https://doi.org/10.1007/s40314-020-01238-z
+ * 
+ * and 
+ * 
+ * https://doi.org/10.1007/s40314-020-01238-z
+ */
 void j0m(int n, double *x, double *j);
 void j1m(int n, double *x, double *j);
 
 void j0m(int n, double *x, double multx, double *j);
 void j1m(int n, double *x, double multx, double *j);
-
-
-
-
-
-template <typename T> T clip(T x, T mn, T mx) {
-	return std::min(mx,std::max(x,mn));
-}
+} // namespace bessel
 
 
 /* function pointer for input conversion */
@@ -657,40 +705,6 @@ class Con2020 {
 };
 
 
-
-/* we want to initialize the model objects with its parameters */
-extern Con2020 con2020;
-
-extern "C" {
-}
-
-double polyeval(double x, double *c, int d);
-
-double pol1eval(double x, double *c, int d);
-
-
-/***********************************************************************
- * NAME : smoothd(z,dz,d)
- * 
- * DESCRIPTION : Smooth fucntion for crossing the current sheet 
- * (replaces the last bit of equation 12 in Edwards et al 2000).
- * 
- * INPUTS : 
- * 		double z	z-coordinate in dipole coordinate system (Rj)
- * 		double dz	Scale of the transition to use (Rj)
- * 		double d	Half thickness of the current sheet.
- * 
- * RETURNS : 
- * 		double out	Smoothed function across the current sheet.
- * 
- * ********************************************************************/
-double smoothd(double z, double dz, double d);
-
-
-
-double trap(int n, double *x, double *y);
-double trapc(int n, double dx, double *y);
-
 /***************************************************************
 *
 *   NAME : FluxCan(rho,z,r0,r1,mui2,D,deltarho,deltaz)
@@ -716,17 +730,7 @@ double trapc(int n, double dx, double *y);
 ***************************************************************/
 double FluxCan(	double rho,double z, double r0, double r1,
 				double mui2, double D, 
-				double deltarho, double deltaz) {
-
-	double A0 = ScalarPotential(rho,z,r0,mui2,D,deltarho,deltaz);
-	double A1 = ScalarPotential(rho,z,r1,mui2,D,deltarho,deltaz);
-
-	/* according to Edwards et al., 2001 the flux is simply
-	rho times the scalar potential */
-	double F = rho*(A0 - A1);
-
-	return F;
-}
+				double deltarho, double deltaz);
 
 /***************************************************************
 *
@@ -740,24 +744,11 @@ double FluxCan(	double rho,double z, double r0, double r1,
 *       double  g		Magnetic dipole coefficient, nT
 *
 ***************************************************************/
-double FluxDip(double r, double theta, double g) {
+double FluxDip(double r, double theta, double g);
+} // namespace con2020
 
-	double sint = sin(theta);
-	double F = (g*sint*sint)/r;
-	return F;
-}
+/* we want to initialize the model objects with its parameters */
+extern con2020::Con2020 con2020inst;
 
-
-
-template <typename T> T sgn(T x) {
-	return (x > 0) - (x < 0);
-}
-
-extern "C" {
-}
-
-
-extern "C" {
-}
 #endif
 #endif
