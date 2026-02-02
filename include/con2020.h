@@ -28,6 +28,59 @@ extern "C" {
 #endif
 void Con2020FieldArray(int n, double *p0, double *p1, double *p2,
 					double *B0, double *B1, double *B2);
+
+void Con2020Field(double p0, double p1, double p2,
+			double *B0, double *B1, double *B2);
+
+void GetCon2020Params(double *mui, double *irho, double *r0, double *r1,
+					double *d, double *xt, double *xp, char *eqtype,
+					bool *Edwards, bool *ErrChk, bool *CartIn, bool *CartOut, 
+					bool  *smooth, double *DeltaRho, double *DeltaZ,
+					double *g, char *azfunc, double *wO_open, double *wO_om,
+					double *thetamm, double *dthetamm, double *thetaoc, double *dthetaoc);
+
+void SetCon2020Params(double mui, double irho, double r0, double r1,
+					double d, double xt, double xp, const char *eqtype,
+					bool Edwards, bool ErrChk, bool CartIn, bool CartOut, 
+					bool smooth, double DeltaRho, double DeltaZ,
+					double g, const char *azfunc, double wO_open, double wO_om,
+					double thetamm, double dthetamm, double thetaoc, double dthetaoc);
+
+void Con2020AnalyticField(	int n, double a, 
+							double *rho, double *z, 
+							double *Brho, double *Bz);
+
+void Con2020AnalyticFieldSmooth(	int n, double a, 
+							double *rho, double *z, 
+							double *Brho, double *Bz);
+double OmegaRatio(	double thetai, double wO_open, double wO_om,
+					double thetamm, double dthetamm,
+					double thetaoc, double dthetaoc);
+
+double PedersenCurrent(	double thetai, double g, 
+					double wO_open, double wO_om,
+					double thetamm, double dthetamm,
+					double thetaoc, double dthetaoc );
+
+double BphiLMIC(double r, double theta, double g,
+						double r0, double r1,
+						double mui2, double D, 
+						double deltarho, double deltaz,
+						double wO_open, double wO_om,
+						double thetamm, double dthetamm,
+						double thetaoc, double dthetaoc );
+
+double BphiIonosphere( 	double thetai, double g,
+						double wO_open, double wO_om,
+						double thetamm, double dthetamm,
+						double thetaoc, double dthetaoc );
+
+double FluxCan(	double rho,double z, double r0, double r1,
+				double mui2, double D, 
+				double deltarho, double deltaz);
+
+double FluxDip(double r, double theta, double g);
+
 #ifdef __cplusplus
 }
 #endif
@@ -665,14 +718,6 @@ class Con2020 {
 };
 
 
-} //namespace con2020;
-/* we want to initialize the model objects with its parameters */
-extern con2020::Con2020 con2020inst;
-
-
-namespace con2020 {
-
-
 /***************************************************************
 *
 *   NAME : FluxCan(rho,z,r0,r1,mui2,D,deltarho,deltaz)
@@ -698,17 +743,7 @@ namespace con2020 {
 ***************************************************************/
 double FluxCan(	double rho,double z, double r0, double r1,
 				double mui2, double D, 
-				double deltarho, double deltaz) {
-
-	double A0 = ScalarPotential(rho,z,r0,mui2,D,deltarho,deltaz);
-	double A1 = ScalarPotential(rho,z,r1,mui2,D,deltarho,deltaz);
-
-	/* according to Edwards et al., 2001 the flux is simply
-	rho times the scalar potential */
-	double F = rho*(A0 - A1);
-
-	return F;
-}
+				double deltarho, double deltaz);
 
 /***************************************************************
 *
@@ -722,15 +757,11 @@ double FluxCan(	double rho,double z, double r0, double r1,
 *       double  g		Magnetic dipole coefficient, nT
 *
 ***************************************************************/
-double FluxDip(double r, double theta, double g) {
+double FluxDip(double r, double theta, double g);
+} // namespace con2020
 
-	double sint = sin(theta);
-	double F = (g*sint*sint)/r;
-	return F;
-}
+/* we want to initialize the model objects with its parameters */
+extern con2020::Con2020 con2020inst;
 
-
-
-}
 #endif
 #endif

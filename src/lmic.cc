@@ -312,3 +312,51 @@ double BphiIonosphere( 	double thetai, double g,
 }
 
 } // end namespace con2020
+
+extern "C" {
+
+double OmegaRatio(	double thetai, double wO_open, double wO_om,
+					double thetamm, double dthetamm,
+					double thetaoc, double dthetaoc) {
+	return con2020::OmegaRatio(thetai, wO_open, wO_om,
+					thetamm, dthetamm,
+					thetaoc, dthetaoc);
+}
+
+double PedersenCurrent(	double thetai, double g, 
+					double wO_open, double wO_om,
+					double thetamm, double dthetamm,
+					double thetaoc, double dthetaoc ) {
+	return con2020::PedersenCurrent(thetai, g, 
+					wO_open, wO_om,
+					thetamm, dthetamm,
+					thetaoc, dthetaoc );
+}
+
+double BphiLMIC(double r, double theta, double g,
+						double r0, double r1,
+						double mui2, double D, 
+						double deltarho, double deltaz,
+						double wO_open, double wO_om,
+						double thetamm, double dthetamm,
+						double thetaoc, double dthetaoc ) {
+	return con2020::BphiLMIC(r, theta, g,
+						r0, r1,
+						mui2, D, 
+						deltarho, deltaz,
+						wO_open, wO_om,
+						thetamm, dthetamm,
+						thetaoc, dthetaoc );
+}
+
+double BphiIonosphere( 	double thetai, double g,
+						double wO_open, double wO_om,
+						double thetamm, double dthetamm,
+						double thetaoc, double dthetaoc ) {
+	return con2020::BphiIonosphere(	thetai, g,
+						wO_open, wO_om,
+						thetamm, dthetamm,
+						thetaoc, dthetaoc );
+}
+
+} // extern "C"

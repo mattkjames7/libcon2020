@@ -59,3 +59,18 @@ double FluxDip(double r, double theta, double g) {
 }
 
 } // end namespace con2020
+
+
+extern "C" {
+
+double FluxCan(	double rho,double z, double r0, double r1,
+				double mui2, double D, 
+				double deltarho, double deltaz) {
+	return con2020::FluxCan(rho,z,r0,r1,mui2,D,deltarho,deltaz);
+}
+
+double FluxDip(double r, double theta, double g) {
+	return con2020::FluxDip(r,theta,g);
+}
+
+} // end extern "C"
