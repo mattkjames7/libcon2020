@@ -3,7 +3,7 @@
 
 int main () {
 	/* create an instance of the model */
-	Con2020 model;
+	con2020::Con2020 model;
 
 	/* set coordinate system to be Cartesian SIII (default) */
 	model.SetCartIn(true);
