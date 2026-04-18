@@ -110,7 +110,7 @@ double PedersenCurrent(	double thetai, double g,
 	double Rj = 71492000.0;
 	
 	/* magnetic field at thetai */
-	double B = abs(2.0* g*cos(thetai)*pow(Rj/Ri,3.0))*1e-9;
+	double B = fabs(2.0* g*cos(thetai)*pow(Rj/Ri,3.0))*1e-9;
 
 	/* calculate rhoi */
 	double rhoi = Ri*sin(thetai);
