@@ -4,6 +4,10 @@ else()
     add_library(libcon2020 STATIC)
 endif()
 
+if(WIN32 AND BUILD_SHARED_LIBS)
+    set_target_properties(libcon2020 PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 add_library(con2020::con2020 ALIAS libcon2020)
 
 set_target_properties(libcon2020 PROPERTIES OUTPUT_NAME con2020)

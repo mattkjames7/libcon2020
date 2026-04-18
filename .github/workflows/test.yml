@@ -3,6 +3,18 @@ name: "Build and Test"
 on: 
   pull_request:
   workflow_dispatch:
+    inputs:
+      build_target:
+        description: "Which job to run"
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - linux
+          - windows-mingw
+          - windows-msvc
+          - macos
   schedule:
     - cron: '0 0 1 * *'  # Runs at midnight UTC on the 1st of every month
 
@@ -10,6 +22,7 @@ run-name: "Build and Test Library"
 
 jobs:
   build_linux:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'linux' }}
     runs-on: "ubuntu-latest"
     steps:
       - name: Checkout current branch
@@ -43,6 +56,7 @@ jobs:
 
 
   build_windows:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'windows-mingw' }}
     runs-on: "windows-latest"
     steps:
       - name: Checkout current branch
@@ -87,7 +101,85 @@ jobs:
           ./build/cppexample.exe
 
 
+  build_windows_msvc:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'windows-msvc' }}
+    runs-on: "windows-latest"
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Install ZLIB (vcpkg)
+        shell: pwsh
+        run: |
+          $vcpkgExe = $null
+          if ($env:VCPKG_ROOT -and (Test-Path "$env:VCPKG_ROOT/vcpkg.exe")) {
+            $vcpkgExe = "$env:VCPKG_ROOT/vcpkg.exe"
+          } else {
+            $cmd = Get-Command vcpkg -ErrorAction SilentlyContinue
+            if ($cmd) {
+              $vcpkgExe = $cmd.Source
+            }
+          }
+
+          if (-not $vcpkgExe) {
+            throw "vcpkg executable not found on PATH and VCPKG_ROOT is not set"
+          }
+
+          $resolvedRoot = Split-Path -Parent $vcpkgExe
+          "VCPKG_ROOT=$resolvedRoot" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          & $vcpkgExe install zlib:x64-windows
+
+      - name: Build Library (MSVC)
+        shell: pwsh
+        run: |
+          $toolchain = "$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+          if (-not (Test-Path $toolchain)) {
+            throw "vcpkg toolchain file not found at: $toolchain"
+          }
+          cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install" -DCMAKE_TOOLCHAIN_FILE="$toolchain" -DVCPKG_TARGET_TRIPLET=x64-windows
+          cmake --build build --config Release --parallel
+
+      - name: Run Tests (MSVC)
+        shell: pwsh
+        run: |
+          ctest --output-on-failure --test-dir build -C Release --parallel
+
+      - name: Install Library (MSVC)
+        shell: pwsh
+        run: cmake --install build --config Release
+
+      - name: Build and Run Examples (MSVC)
+        shell: pwsh
+        run: |
+          $exampleSrc = "$PWD/build/examples_msvc_src"
+          $exampleBuild = "$PWD/build/examples_msvc_build"
+          New-Item -ItemType Directory -Force -Path $exampleSrc | Out-Null
+          @'
+          cmake_minimum_required(VERSION 3.10)
+          project(con2020_examples C CXX)
+
+          add_executable(cexample "${CMAKE_SOURCE_DIR}/../../examples/cexample.c")
+          target_include_directories(cexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/include")
+          target_link_directories(cexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/lib")
+          target_link_libraries(cexample PRIVATE con2020)
+
+          add_executable(cppexample "${CMAKE_SOURCE_DIR}/../../examples/cppexample.cc")
+          target_include_directories(cppexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/include")
+          target_link_directories(cppexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/lib")
+          target_link_libraries(cppexample PRIVATE con2020)
+          '@ | Set-Content -Path "$exampleSrc/CMakeLists.txt"
+
+          cmake -S "$exampleSrc" -B "$exampleBuild" -G "Visual Studio 17 2022" -A x64
+          cmake --build "$exampleBuild" --config Release --parallel
+          $env:PATH = "$PWD/install/bin;$env:PATH"
+          & "$exampleBuild/Release/cexample.exe"
+          & "$exampleBuild/Release/cppexample.exe"
+
+
   build_macos:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.build_target == 'all' || github.event.inputs.build_target == 'macos' }}
     runs-on: "macos-latest"
     steps:
       - name: Checkout current branch

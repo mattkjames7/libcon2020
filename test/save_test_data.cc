@@ -7,6 +7,10 @@
 #include <fstream>
 #include <zlib.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 
 template <std::size_t N, typename T = double>
 std::array<T, N> random_array(T min, T max) {
@@ -24,6 +28,7 @@ std::array<T, N> random_array(T min, T max) {
 
 nlohmann::json collect_model_data(std::string eqtype) {
     const std::size_t N = 100;
+    const int Ni = static_cast<int>(N);
 
     con2020::Con2020 model;
 
@@ -54,7 +59,7 @@ nlohmann::json collect_model_data(std::string eqtype) {
     model.SetCartIn(true);
     model.SetCartOut(true);
     model.Field(
-        N,
+        Ni,
         x_vals.data(), y_vals.data(), z_vals.data(),
         Bx_vals.data(), By_vals.data(), Bz_vals.data()
     );
@@ -62,7 +67,7 @@ nlohmann::json collect_model_data(std::string eqtype) {
     model.SetCartIn(false);
     model.SetCartOut(false);
     model.Field(
-        N,
+        Ni,
         r_vals.data(), theta_vals.data(), phi_vals.data(),
         Br_vals.data(), Btheta_vals.data(), Bphi_vals.data()
     );
@@ -70,20 +75,20 @@ nlohmann::json collect_model_data(std::string eqtype) {
     // Collect data into JSON
     nlohmann::json model_data;
     model_data["cartesian"] = {
-        "x", x_vals,
-        "y", y_vals,
-        "z", z_vals,
-        "Bx", Bx_vals,
-        "By", By_vals,
-        "Bz", Bz_vals
+        {"x", x_vals},
+        {"y", y_vals},
+        {"z", z_vals},
+        {"Bx", Bx_vals},
+        {"By", By_vals},
+        {"Bz", Bz_vals}
     };
     model_data["spherical"] = {
-        "r", r_vals,
-        "theta", theta_vals,
-        "phi", phi_vals,
-        "Br", Br_vals,
-        "Btheta", Btheta_vals,
-        "Bphi", Bphi_vals
+        {"r", r_vals},
+        {"theta", theta_vals},
+        {"phi", phi_vals},
+        {"Br", Br_vals},
+        {"Btheta", Btheta_vals},
+        {"Bphi", Bphi_vals}
     };
     return model_data;
 }
@@ -91,6 +96,7 @@ nlohmann::json collect_model_data(std::string eqtype) {
 
 nlohmann::json collect_bessel_data() {
     const std::size_t N = 1000;
+    const int Ni = static_cast<int>(N);
     auto x_vals0 = random_array<N>(0.0, 5.0);
     auto x_vals1 = random_array<N>(5.0, 10.0);
 
@@ -99,10 +105,10 @@ nlohmann::json collect_bessel_data() {
     std::array<double, N> j1_vals0;
     std::array<double, N> j1_vals1;
 
-    con2020::bessel::j0(N, x_vals0.data(), j0_vals0.data());
-    con2020::bessel::j0(N, x_vals1.data(), j0_vals1.data());
-    con2020::bessel::j1(N, x_vals0.data(), j1_vals0.data());
-    con2020::bessel::j1(N, x_vals1.data(), j1_vals1.data());
+    con2020::bessel::j0(Ni, x_vals0.data(), j0_vals0.data());
+    con2020::bessel::j0(Ni, x_vals1.data(), j0_vals1.data());
+    con2020::bessel::j1(Ni, x_vals0.data(), j1_vals0.data());
+    con2020::bessel::j1(Ni, x_vals1.data(), j1_vals1.data());
 
     // Collect data into JSON
     nlohmann::json bessel_data;
