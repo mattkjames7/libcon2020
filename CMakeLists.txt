@@ -11,9 +11,14 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
 endif()
 
-set(CMAKE_CXX_FLAGS_RELEASE "-g -O3 -Wall -Wextra")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -DDEBUG")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+if (MSVC)
+    set(CMAKE_CXX_FLAGS_RELEASE "/O2 /W4")
+    set(CMAKE_CXX_FLAGS_DEBUG "/Od /W4 /DDEBUG")
+else()
+    set(CMAKE_CXX_FLAGS_RELEASE "-g -O3 -Wall -Wextra")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall -Wextra -DDEBUG")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+endif()
 
 add_subdirectory(src)
 

@@ -110,13 +110,19 @@ jobs:
         with:
           ref: ${{ github.ref }}
 
-      - name: Set up MSVC Developer Command Prompt
-        uses: ilammy/msvc-dev-cmd@v1
+      - name: Install ZLIB (vcpkg)
+        shell: pwsh
+        run: |
+          if ($env:VCPKG_ROOT -and (Test-Path "$env:VCPKG_ROOT/vcpkg.exe")) {
+            & "$env:VCPKG_ROOT/vcpkg.exe" install zlib:x64-windows
+          } else {
+            vcpkg install zlib:x64-windows
+          }
 
       - name: Build Library (MSVC)
         shell: pwsh
         run: |
-          cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install"
+          cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DENABLE_TESTS=ON -DCMAKE_INSTALL_PREFIX="$PWD/install" -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows
           cmake --build build --config Release --parallel
 
       - name: Run Tests (MSVC)
@@ -131,11 +137,29 @@ jobs:
       - name: Build and Run Examples (MSVC)
         shell: pwsh
         run: |
-          cl /nologo /I "$PWD/install/include" examples/cexample.c /link /LIBPATH:"$PWD/install/lib" con2020.lib /OUT:build/cexample.exe
-          cl /nologo /EHsc /I "$PWD/install/include" examples/cppexample.cc /link /LIBPATH:"$PWD/install/lib" con2020.lib /OUT:build/cppexample.exe
+          $exampleSrc = "$PWD/build/examples_msvc_src"
+          $exampleBuild = "$PWD/build/examples_msvc_build"
+          New-Item -ItemType Directory -Force -Path $exampleSrc | Out-Null
+          @"
+          cmake_minimum_required(VERSION 3.10)
+          project(con2020_examples C CXX)
+
+          add_executable(cexample "${CMAKE_SOURCE_DIR}/../../examples/cexample.c")
+          target_include_directories(cexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/include")
+          target_link_directories(cexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/lib")
+          target_link_libraries(cexample PRIVATE con2020)
+
+          add_executable(cppexample "${CMAKE_SOURCE_DIR}/../../examples/cppexample.cc")
+          target_include_directories(cppexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/include")
+          target_link_directories(cppexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/lib")
+          target_link_libraries(cppexample PRIVATE con2020)
+          "@ | Set-Content -Path "$exampleSrc/CMakeLists.txt"
+
+          cmake -S "$exampleSrc" -B "$exampleBuild" -G "Visual Studio 17 2022" -A x64
+          cmake --build "$exampleBuild" --config Release --parallel
           $env:PATH = "$PWD/install/bin;$env:PATH"
-          & "$PWD/build/cexample.exe"
-          & "$PWD/build/cppexample.exe"
+          & "$exampleBuild/Release/cexample.exe"
+          & "$exampleBuild/Release/cppexample.exe"
 
 
   build_macos:
