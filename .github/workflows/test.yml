@@ -156,7 +156,7 @@ jobs:
           $exampleSrc = "$PWD/build/examples_msvc_src"
           $exampleBuild = "$PWD/build/examples_msvc_build"
           New-Item -ItemType Directory -Force -Path $exampleSrc | Out-Null
-          @"
+          @'
           cmake_minimum_required(VERSION 3.10)
           project(con2020_examples C CXX)
 
@@ -169,7 +169,7 @@ jobs:
           target_include_directories(cppexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/include")
           target_link_directories(cppexample PRIVATE "${CMAKE_SOURCE_DIR}/../../install/lib")
           target_link_libraries(cppexample PRIVATE con2020)
-          "@ | Set-Content -Path "$exampleSrc/CMakeLists.txt"
+          '@ | Set-Content -Path "$exampleSrc/CMakeLists.txt"
 
           cmake -S "$exampleSrc" -B "$exampleBuild" -G "Visual Studio 17 2022" -A x64
           cmake --build "$exampleBuild" --config Release --parallel
