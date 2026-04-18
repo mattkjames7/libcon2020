@@ -7,7 +7,7 @@
 #endif
 #define LIBCON2020_VERSION_MAJOR 1
 #define LIBCON2020_VERSION_MINOR 2
-#define LIBCON2020_VERSION_PATCH 0
+#define LIBCON2020_VERSION_PATCH 1
 
 /* C-linkage wrapper for array field evaluation */
 #ifdef __cplusplus
